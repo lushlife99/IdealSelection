@@ -6,7 +6,7 @@ import lombok.Data;
 public class Ideal {
 
     private Long id;
-    private String name;
+    private String idealName;
     private Double winRate;
-
+    private IdealSelection selection;
 }

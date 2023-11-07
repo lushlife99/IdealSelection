@@ -16,9 +16,9 @@ public class IdealSelection {
 
     private String title;
     private String body;
-    private List<Integer> winCount;
-
+    private String filePath;
     private List<Ideal> idealList;
+    private List<Integer> winCount;
     private int subCount;
     private User creator;
     private List<Reply> replyList;
