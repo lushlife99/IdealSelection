@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.idealselect.repository.UserMapper">
 
-    <insert id="save">
+    <insert id="save" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
         insert into user (user_id, password, user_name)
         values (#{userId}, #{password}, #{userName})
     </insert>

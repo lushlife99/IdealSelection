@@ -11,13 +11,11 @@ import java.util.Optional;
 
 @Mapper
 public interface UserMapper {
-
     void save(User user);
-    void update(@Param("id") Long id, @Param("user")User user);
+    void update(Long id, User user);
     List<User> findAll();
     Optional<User> findById(Long id);
     Optional<User> findByUserId(String userId);
-
     void deleteById(Long id);
 
 }

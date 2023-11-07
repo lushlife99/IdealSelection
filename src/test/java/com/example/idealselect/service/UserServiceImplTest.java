@@ -2,6 +2,7 @@ package com.example.idealselect.service;
 
 import com.example.idealselect.entity.User;
 import com.example.idealselect.repository.UserMapper;
+import groovy.util.logging.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -16,6 +17,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+@Slf4j
 @Transactional
 @SpringBootTest
 class UserServiceImplTest {
@@ -54,7 +56,7 @@ class UserServiceImplTest {
         User user = User.builder().userId(USERID).userName(USERNAME).password(PASSWORD).build();
         userMapper.save(user);
         User findUser = userMapper.findByUserId(USERID).get();
-        final String updatePassword = "4321";
+        final String updatePassword = "Pw Is Changed";
 
         findUser.setPassword(updatePassword);
 
@@ -73,6 +75,16 @@ class UserServiceImplTest {
         userMapper.deleteById(findUser.getId());
 
         assertThat(userMapper.findById(findUser.getId()).isEmpty()).isTrue();
+    }
+
+    @Test
+    void selectTest(){
+        User user = User.builder().userId(USERID).userName(USERNAME).password(PASSWORD).build();
+        userMapper.save(user);
+
+        User findUser = userMapper.findByUserId(USERID).get();
+
+        assertThat(findUser.getUserId()).isEqualTo(USERID);
     }
 
 

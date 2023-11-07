@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.idealselect.repository.IdealSelectionMapper">
+
+    <insert id="save" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        insert into ideal_selection (title, body, file_path, sub_count, creator_id)
+        values (#{title}, #{body}, #{filePath}, #{subCount}, #{creator.id})
+    </insert>
+
+    <select id="findById" resultType="IdealSelection">
+        select id, title, body, file_path, sub_count, creator_id
+        from ideal_selection
+        where id = #{id}
+    </select>
+
+<!--    <select id="findById" resultMap="idealSelectionResultMap">-->
+<!--        SELECT-->
+<!--            is.id AS id,-->
+<!--            is.title AS title,-->
+<!--            is.body AS body,-->
+<!--            is.file_path AS filePath,-->
+<!--            is.sub_count AS subCount,-->
+<!--            is.creator_id AS creatorId,-->
+<!--            il.id AS idealList_id,-->
+<!--            il.ideal_name AS idealList_idealName,-->
+<!--            il.win_rate AS idealList_winRate,-->
+<!--            r.id AS replyList_id,-->
+<!--            r.comment AS replyList_comment,-->
+<!--            r.author_id AS replyList_authorId,-->
+<!--            r.selection_id AS replyList_selectionId,-->
+<!--            r.update_time AS replyList_updateTime-->
+<!--        FROM ideal_selection is-->
+<!--    LEFT JOIN ideal il ON is.id = il.selection_id-->
+<!--            LEFT JOIN reply r ON is.id = r.selection_id-->
+<!--        WHERE is.id = #{id}-->
+<!--    </select>-->
+
+</mapper>
