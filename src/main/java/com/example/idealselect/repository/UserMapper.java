@@ -4,6 +4,7 @@ import com.example.idealselect.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,9 +13,11 @@ import java.util.Optional;
 public interface UserMapper {
 
     void save(User user);
-    void update(@Param("id") Long id, @Param("updateParam")User user);
+    void update(@Param("id") Long id, @Param("user")User user);
     List<User> findAll();
     Optional<User> findById(Long id);
     Optional<User> findByUserId(String userId);
+
+    void deleteById(Long id);
 
 }

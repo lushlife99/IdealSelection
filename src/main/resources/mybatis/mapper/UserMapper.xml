@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.idealselect.repository.UserMapper">
+
+    <insert id="save">
+        insert into user (user_id, password, user_name)
+        values (#{userId}, #{password}, #{userName})
+    </insert>
+    
+    <update id="update">
+        update user
+        set user_id =#{user.userId},
+            password =#{user.password},
+            user_name =#{user.userName}
+        where id =#{id}
+    </update>
+
+    <select id="findById" resultType="User">
+        select id, user_id, password, user_name
+        from user
+        where id = #{id}
+    </select>
+
+    <select id="findByUserId" resultType="User">
+        select id, user_id, password, user_name
+        from user
+        where user_id =#{userId}
+    </select>
+
+    <select id="findAll" resultType="User">
+        select id, user_id, password, user_name
+        from user
+    </select>
+
+    <delete id="deleteById">
+        delete
+        from user
+        where id = #{id}
+    </delete>
+</mapper>
