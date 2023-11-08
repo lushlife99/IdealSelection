@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.idealselect.repository.IdealMapper">
+
+    <insert id="save" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        insert into ideal (ideal_name, win_rate, selection_id, win_count)
+        values (#{idealName}, #{winRate}, #{selection.id}, #{winCount})
+    </insert>
+
+    <update id="update">
+        update ideal
+        set ideal_name = #{idealName},
+            win_rate = #{winRate},
+            selection_id = #{selection.id},
+            win_count = #{winCount}
+        where id =#{id}
+    </update>
+
+    <select id="findById" resultType="Ideal">
+        select id, ideal_name, win_rate, selection_id, win_count
+        from ideal
+        where id = #{id}
+    </select>
+
+    <delete id="deleteById">
+        delete
+        from ideal
+        where id = #{id}
+    </delete>
+
+
+    <select id="findAllBySelectionId" resultType="Ideal">
+        select id, ideal_name, win_rate, selection_id, win_count
+        from ideal
+        where selection_id = #{selectionId}
+    </select>
+
+    <insert id="saveAll" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="java.util.List">
+        INSERT INTO ideal (ideal_name, win_rate, selection_id, win_count)
+        values
+        <foreach collection="list" item="ideal" separator=" , ">
+            values (#{ideal.idealName},#{ideal.idealwinRate}, #{ideal.selection.id}, #{ideal.winCount})
+        </foreach>
+    </insert>
+
+    <insert id="deleteAll" parameterType="java.util.List">
+        delete
+        from ideal
+        where
+        <foreach collection="list" item="ideal" separator=" , ">
+            id = #{ideal.id}
+        </foreach>
+    </insert>
+
+</mapper>

@@ -12,6 +12,7 @@ public interface IdealSelectionMapper {
     void save(IdealSelection idealSelection);
     void update(Long id, IdealSelection selection);
     Optional<IdealSelection> findById(Long id);
+    Optional<IdealSelection> findByIdAllResult(Long id);
     void deleteById(Long id);
     List<IdealSelection> findAll();
     List<IdealSelection> findByCreatorId(Long creatorId);

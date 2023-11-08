@@ -4,10 +4,7 @@
 
 <mapper namespace="com.example.idealselect.repository.IdealSelectionMapper">
 
-    <insert id="save" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
-        insert into ideal_selection (title, body, file_path, sub_count, creator_id)
-        values (#{title}, #{body}, #{filePath}, #{subCount}, #{creator.id})
-    </insert>
+
 
     <resultMap id="IdealSelectionResultMap" type="IdealSelection">
         <id property="id" column="id"/>
@@ -53,13 +50,27 @@
         </if>
     </sql>
 
+    <insert id="save" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        insert into ideal_selection (title, body, file_path, sub_count, creator_id, update_time)
+        values (#{title}, #{body}, #{filePath}, #{subCount}, #{creator.id}, #{updateTime})
+    </insert>
+
+    <update id="update">
+        update ideal_selection
+        set title =#{selection.title},
+            body =#{selection.body},
+            sub_count =#{selection.subCount},
+            file_path =#{selection.filePath}
+        where id =#{id}
+    </update>
+
     <select id="findById" resultType="IdealSelection">
         select id, title, body, file_path, sub_count, creator_id
         from ideal_selection
         where id = #{id}
     </select>
 
-    <select id="findById" resultMap="IdealSelectionResultMap">
+    <select id="findByIdAllResult" resultMap="IdealSelectionResultMap">
         SELECT
             selection.id AS id,
             selection.title AS title,
@@ -88,15 +99,6 @@
         WHERE selection.id = #{id}
     </select>
 
-    <update id="update">
-        update ideal_selection
-        set title =#{selection.title},
-            body =#{selection.body},
-            sub_count =#{selection.subCount},
-            file_path =#{selection.filePath}
-        where id =#{id}
-    </update>
-
     <delete id="deleteById">
         delete
         from ideal_selection
@@ -112,19 +114,6 @@
         select s.id as id, s.title as title, s.body as body, s.file_path as file_path, s.sub_count as sub_count
         from ideal_selection s, user u
         where s.creator_id in u.id
-    </select>
-
-    <select id="findAll" resultType="Item">
-        select id, item_name, price, quantity
-        from item
-        <where>
-            <if test="itemName != null and itemName != ''">
-                and item_name like concat('%', #{itemName}, '%')
-            </if>
-            <if test="maxPrice != null">
-                and price &lt;= #{maxPrice}
-            </if>
-        </where>
     </select>
 
     <select id="findAllBySearchCond" resultMap="IdealSelectionResultMap">

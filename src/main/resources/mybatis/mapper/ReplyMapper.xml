@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.idealselect.repository.ReplyMapper">
+
+    <insert id="save" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        insert into reply (comment, author_id, author_name, selection_id, update_time)
+        values (#{comment}, #{userId}, #{userName}, #{idealSelectionId}, #{updateTime})
+    </insert>
+
+    <update id="update">
+        update reply
+        set comment = #{reply.comment},
+            author_id = #{reply.userId},
+            author_name = #{reply.userName},
+            selection_id = #{reply.idealSelectionId},
+            update_time = #{reply.updateTime}
+        where id =#{id}
+    </update>
+
+    <select id="findById" resultType="Reply">
+        select id, comment, author_id, author_name, selection_id, update_time
+        from reply
+        where id = #{id}
+    </select>
+
+    <select id="findAllBySelectionId" resultType="Reply">
+        select id, comment, author_id, author_name, selection_id, update_time
+        from reply
+        where selection_id = #{selectionId}
+    </select>
+
+    <delete id="deleteById">
+        delete
+        from reply
+        where id = #{id}
+    </delete>
+
+</mapper>
