@@ -8,8 +8,9 @@ import java.time.LocalDateTime;
 public class Reply {
 
     private Long id;
+    private Long userId;
     private String comment;
-    private User author;
+    private String userName;
     private Long idealSelectionId;
     private LocalDateTime updateTime;
 }

@@ -3,19 +3,17 @@ package com.example.idealselect.service;
 import com.example.idealselect.entity.IdealSelection;
 import com.example.idealselect.entity.User;
 import com.example.idealselect.repository.IdealSelectionMapper;
-import groovy.util.logging.Slf4j;
-import org.assertj.core.api.Assertions;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.transaction.annotation.Transactional;
+
 
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.*;
 
+@Slf4j
 @SpringBootTest
 class SelectionServiceImplTest {
 
@@ -39,6 +37,8 @@ class SelectionServiceImplTest {
         selectionMapper.save(selection);
 
         IdealSelection findSelection = selectionMapper.findById(selection.getId()).get();
+        log.info("findSelection={}", findSelection);
+
     }
 
 }

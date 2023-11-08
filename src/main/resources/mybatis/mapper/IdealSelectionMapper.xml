@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
 <mapper namespace="com.example.idealselect.repository.IdealSelectionMapper">
 
     <insert id="save" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
@@ -8,32 +9,138 @@
         values (#{title}, #{body}, #{filePath}, #{subCount}, #{creator.id})
     </insert>
 
+    <resultMap id="IdealSelectionResultMap" type="IdealSelection">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="body" column="body"/>
+        <result property="filePath" column="filePath"/>
+        <result property="subCount" column="subCount"/>
+        <result property="updateTime" column="updateTime"/>
+        <association property="creator" javaType="User">
+            <id property="id" column="creatorId"/>
+            <result property="userId" column="creator_userId"/>
+            <result property="password" column="creator_password"/>
+            <result property="userName" column="creator_userName"/>
+        </association>
+        <collection property="idealList" ofType="Ideal">
+            <id property="id" column="idealList_id"/>
+            <result property="idealName" column="idealList_idealName"/>
+            <result property="winRate" column="idealList_winRate"/>
+            <result property="winCount" column="idealList_winCount"/>
+        </collection>
+        <collection property="replyList" ofType="Reply">
+            <id property="id" column="reply_id"/>
+            <result property="comment" column="replyList_comment"/>
+            <result property="updateTime" column="replyList_updateTime"/>
+            <result property="userId" column="reply_authorId"/>
+            <result property="userName" column="reply_authorName"/>
+            <result property="updateTime" column="reply_updateTime"/>
+        </collection>
+    </resultMap>
+
+    <sql id="dynamicOrderBy">
+        <if test="orderType == null || orderType == 'POPULARITY'">
+            ORDER BY sub_count DESC
+        </if>
+        <if test="orderType == 'LATEST'">
+            ORDER BY update_time DESC
+        </if>
+    </sql>
+
+    <sql id="orderByLatest">
+        <if test="orderBy != null">
+            ORDER BY
+        </if>
+    </sql>
+
     <select id="findById" resultType="IdealSelection">
         select id, title, body, file_path, sub_count, creator_id
         from ideal_selection
         where id = #{id}
     </select>
 
-<!--    <select id="findById" resultMap="idealSelectionResultMap">-->
-<!--        SELECT-->
-<!--            is.id AS id,-->
-<!--            is.title AS title,-->
-<!--            is.body AS body,-->
-<!--            is.file_path AS filePath,-->
-<!--            is.sub_count AS subCount,-->
-<!--            is.creator_id AS creatorId,-->
-<!--            il.id AS idealList_id,-->
-<!--            il.ideal_name AS idealList_idealName,-->
-<!--            il.win_rate AS idealList_winRate,-->
-<!--            r.id AS replyList_id,-->
-<!--            r.comment AS replyList_comment,-->
-<!--            r.author_id AS replyList_authorId,-->
-<!--            r.selection_id AS replyList_selectionId,-->
-<!--            r.update_time AS replyList_updateTime-->
-<!--        FROM ideal_selection is-->
-<!--    LEFT JOIN ideal il ON is.id = il.selection_id-->
-<!--            LEFT JOIN reply r ON is.id = r.selection_id-->
-<!--        WHERE is.id = #{id}-->
-<!--    </select>-->
+    <select id="findById" resultMap="IdealSelectionResultMap">
+        SELECT
+            selection.id AS id,
+            selection.title AS title,
+            selection.body AS body,
+            selection.file_path AS filePath,
+            selection.sub_count AS subCount,
+            selection.creator_id AS creatorId,
+            selection.update_time AS updateTime,
+            ideal.id AS idealList_id,
+            ideal.ideal_name AS idealList_idealName,
+            ideal.win_rate AS idealList_winRate,
+            ideal.win_count AS idealList_winCount,
+            reply.id AS replyList_id,
+            reply.comment AS replyList_comment,
+            reply.author_id AS replyList_authorId,
+            reply.author_name AS replyList_authorName,
+            reply.update_time AS replyList_updateTime,
+            user.id AS creator_id,
+            user.user_id AS creator_userId,
+            user.password AS creator_password,
+            user.user_name AS creator_userName
+        FROM ideal_selection selection
+                 LEFT JOIN ideal ideal ON selection.id = ideal.selection_id
+                 LEFT JOIN reply reply ON selection.id = reply.selection_id
+                 LEFT JOIN user user ON selection.creator_id = user.id
+        WHERE selection.id = #{id}
+    </select>
+
+    <update id="update">
+        update ideal_selection
+        set title =#{selection.title},
+            body =#{selection.body},
+            sub_count =#{selection.subCount},
+            file_path =#{selection.filePath}
+        where id =#{id}
+    </update>
+
+    <delete id="deleteById">
+        delete
+        from ideal_selection
+        where id = #{id}
+    </delete>
+
+    <select id="findAll" resultMap="IdealSelectionResultMap">
+        select id, title, body, file_path, sub_count
+        from ideal_selection
+    </select>
+
+    <select id="findByCreatorId" resultMap="IdealSelectionResultMap">
+        select s.id as id, s.title as title, s.body as body, s.file_path as file_path, s.sub_count as sub_count
+        from ideal_selection s, user u
+        where s.creator_id in u.id
+    </select>
+
+    <select id="findAll" resultType="Item">
+        select id, item_name, price, quantity
+        from item
+        <where>
+            <if test="itemName != null and itemName != ''">
+                and item_name like concat('%', #{itemName}, '%')
+            </if>
+            <if test="maxPrice != null">
+                and price &lt;= #{maxPrice}
+            </if>
+        </where>
+    </select>
+
+    <select id="findAllBySearchCond" resultMap="IdealSelectionResultMap">
+        select id, title, body, file_path, sub_count
+        from ideal_selection
+        <where>
+            <if test="title != null">
+                and title like concat('%', #{title}, '%')
+            </if>
+        </where>
+        <if test="orderType == null || orderType == 'POPULARITY'">
+            ORDER BY sub_count DESC
+        </if>
+        <if test="orderType == 'LATEST'">
+            ORDER BY update_time DESC
+        </if>
+    </select>
 
 </mapper>
