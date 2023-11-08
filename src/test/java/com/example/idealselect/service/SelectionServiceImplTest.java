@@ -45,7 +45,6 @@ class SelectionServiceImplTest {
 
         IdealSelection findSelection = selectionMapper.findById(selection.getId()).get();
         log.info("findSelection={}", findSelection);
-
     }
 
 }

@@ -36,7 +36,7 @@
     </resultMap>
 
     <sql id="dynamicOrderBy">
-        <if test="orderType == null || orderType == 'POPULARITY'">
+        <if test="orderType == null or orderType == 'POPULARITY'">
             ORDER BY sub_count DESC
         </if>
         <if test="orderType == 'LATEST'">
@@ -106,7 +106,7 @@
     </delete>
 
     <select id="findAll" resultMap="IdealSelectionResultMap">
-        select id, title, body, file_path, sub_count
+        select id, title, body, file_path, sub_count, creator_id
         from ideal_selection
     </select>
 
@@ -124,12 +124,7 @@
                 and title like concat('%', #{title}, '%')
             </if>
         </where>
-        <if test="orderType == null || orderType == 'POPULARITY'">
-            ORDER BY sub_count DESC
-        </if>
-        <if test="orderType == 'LATEST'">
-            ORDER BY update_time DESC
-        </if>
+        <include refid="dynamicOrderBy"></include>
     </select>
 
 </mapper>

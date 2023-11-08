@@ -39,19 +39,17 @@
 
     <insert id="saveAll" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="java.util.List">
         INSERT INTO ideal (ideal_name, win_rate, selection_id, win_count)
-        values
-        <foreach collection="list" item="ideal" separator=" , ">
-            values (#{ideal.idealName},#{ideal.idealwinRate}, #{ideal.selection.id}, #{ideal.winCount})
+        VALUES
+        <foreach collection="list" item="ideal" separator=",">
+            (#{ideal.idealName}, #{ideal.winRate}, #{ideal.selection.id}, #{ideal.winCount})
         </foreach>
     </insert>
 
-    <insert id="deleteAll" parameterType="java.util.List">
-        delete
-        from ideal
-        where
-        <foreach collection="list" item="ideal" separator=" , ">
-            id = #{ideal.id}
+    <delete id="deleteAll" parameterType="java.util.List">
+        DELETE FROM ideal WHERE id IN
+        <foreach collection="list" item="id" open="(" close=")" separator=",">
+            #{id}
         </foreach>
-    </insert>
+    </delete>
 
 </mapper>
