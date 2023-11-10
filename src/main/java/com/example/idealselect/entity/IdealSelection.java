@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * subCount -> SubMission Count.
@@ -24,12 +25,14 @@ public class IdealSelection {
     private Long id;
     private String title;
     private String body;
-    private String filePath;
+    @Builder.Default
+    private String filePath = UUID.randomUUID().toString();
     @Builder.Default
     private List<Ideal> idealList = new ArrayList<>();
     @Builder.Default
     private List<Reply> replyList = new ArrayList<>();
     private int subCount;
     private User creator;
-    private LocalDateTime updateTime;
+    @Builder.Default
+    private LocalDateTime updateTime = LocalDateTime.now();
 }

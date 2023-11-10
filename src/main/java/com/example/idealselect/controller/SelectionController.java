@@ -1,5 +1,6 @@
 package com.example.idealselect.controller;
 
+import com.example.idealselect.dto.IdealSelectionDto;
 import com.example.idealselect.entity.User;
 import com.example.idealselect.exception.CustomException;
 import com.example.idealselect.exception.ErrorCode;
@@ -8,9 +9,8 @@ import com.example.idealselect.session.SessionManager;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-
-import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -20,10 +20,11 @@ public class SelectionController {
     private final SessionManager sessionManager;
 
     @GetMapping("/main")
-    public String mainPage(HttpServletRequest request){
+    public String mainPage(Model model, HttpServletRequest request){
         if (sessionManager.getSession(request).isEmpty())
             return "redirect:/login";
 
+        model.addAttribute("selectionList",selectionService.getByPopularity(request));
         return "main";
     }
 

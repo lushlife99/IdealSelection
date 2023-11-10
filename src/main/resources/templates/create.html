@@ -2,9 +2,98 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>createPage</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
+<nav class="navbar navbar-expand-sm bg-light mb-3">
+    <div class="container-fluid">
+        <!-- Navigation links -->
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="/main">이상형 월드컵</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/create">이상형 월드컵 만들기</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/mySelection">내 월드컵 관리</a>
+            </li>
+        </ul>
+
+        <!-- Logout button -->
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="logout()">로그아웃</a>
+            </li>
+        </ul>
+
+    </div>
+</nav>
+
+<div class="ibox-content">
+    <form name="form" method="post" action="/api/selection/create" enctype="multipart/form-data">
+        <div class="form-group mb-3">
+            <label class="col-sm-1 control-label">제목</label>
+            <div class="col-sm-11">
+                <input type="text" name="title" class="form-control wh" value="">
+                <span class="help-block m-b-none">이상형월드컵의 제목을 입력하세요. 예) 여자 아이돌 이상형월드컵, 남자 연예인 이상형월드컵</span>
+            </div>
+        </div>
+        <div class="hr-line-dashed"></div>
+        <div class="form-group mb-3">
+            <label class="col-sm-1 control-label">설명</label>
+            <div class="col-sm-11">
+                <input type="text" name="body" class="form-control wh" value="">
+                <span class="help-block m-b-none">설명, 하고싶은 말 등을 자유롭게 쓰세요.</span>
+            </div>
+        </div>
+        <div class="hr-line-dashed mb-3">
+            <input type="file" name="files" multiple="multiple"/>
+        </div>
+        <div class="form-group mb-3">
+            <div class="col-sm-4 col-sm-offset-1">
+                <button type="button" onclick="saveData()">저장하기</button>
+            </div>
+        </div>
+    </form>
+</div>
 
 </body>
 </html>
+
+<script th:inline="javascript">
+    function saveData() {
+        var formData = new FormData($('#form')[0]);
+        var titleValue = document.querySelector('input[name="title"]').value;
+        var bodyValue = document.querySelector('input[name="body"]').value;
+        formData.append("title", titleValue);
+        formData.append("body", bodyValue);
+        var filesInput = document.querySelector('input[name="files"]');
+        var files = filesInput.files;
+
+        for (var i = 0; i < files.length; i++) {
+            formData.append("files", files[i]);
+        }
+        $.ajax({
+            url: '/api/selection/create',
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(response) {
+                alert("완료");
+                window.location.href = '/mySelection'
+
+            },
+            error: function (error) {
+                alert("실패");
+                console.log("실패", JSON.stringify(error));
+            }
+
+        });
+    }
+</script>
