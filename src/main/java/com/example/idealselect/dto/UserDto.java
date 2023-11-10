@@ -3,9 +3,11 @@ package com.example.idealselect.dto;
 import com.example.idealselect.entity.IdealSelection;
 import com.example.idealselect.entity.Reply;
 import com.example.idealselect.entity.User;
+import lombok.Getter;
 
 import java.util.List;
 
+@Getter
 public class UserDto {
 
     private Long id;

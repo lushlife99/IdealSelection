@@ -1,10 +1,69 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>login</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <style>
+        .root {
+            width: 60%;
+            margin: auto;
+        }
+    </style>
+
+    <!-- Include Thymeleaf attributes -->
+    <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+    <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
 </head>
 <body>
-    asdfasdfasdfasdfadsfasdfadsf
+<div class="d-flex justify-content-center align-items-center vh-100">
+    <div class="root">
+        <h2>서비스를 이용하기 위해선 로그인이 필요합니다.</h2>
+        <p>계정이 없으시다면 생성해주세요.</p>
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="usr">UserId:</label>
+                <input type="text" class="form-control" id="usr" name="username">
+            </div>
+            <div class="form-group">
+                <label for="pwd">Password:</label>
+                <input type="password" class="form-control" id="pwd" name="password">
+            </div>
+            <button type="button" class="btn btn-primary" onclick="submitForm()">Submit</button>
+        </form>
+    </div>
+</div>
+
+<!-- Include Thymeleaf attribute for CSRF token -->
+<script th:inline="javascript">
+    function submitForm() {
+        var userId = $('#usr').val();
+        var password = $('#pwd').val();
+
+        var data = {
+            userId: userId,
+            password: password
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: '/api/login',  // 실제 로그인 엔드포인트로 변경
+            contentType: 'application/x-www-form-urlencoded',
+            data: data,
+            success: function (response) {
+                window.location.href = '/main';
+            },
+            error: function (error) {
+                alert(error.responseJSON.message);
+            }
+        });
+    }
+</script>
+
 </body>
 </html>

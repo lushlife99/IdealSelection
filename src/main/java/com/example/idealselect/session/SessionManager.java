@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -27,12 +28,12 @@ public class SessionManager {
         response.addCookie(cookie);
     }
 
-    public User getSession(HttpServletRequest request){
+    public Optional<User> getSession(HttpServletRequest request){
         Cookie cookie = findCookie(request, SESSION_COOKIE_NAME);
         if(cookie == null){
-            return null;
+            return Optional.empty();
         }
-        return sessionStore.get(cookie.getValue());
+        return Optional.of(sessionStore.get(cookie.getValue()));
     }
 
     public void expire(HttpServletRequest request){
@@ -42,7 +43,7 @@ public class SessionManager {
         }
     }
 
-    public Cookie findCookie(HttpServletRequest request, String cookieName) {
+    private Cookie findCookie(HttpServletRequest request, String cookieName) {
         if (request.getCookies() == null) {
             return null;
         }

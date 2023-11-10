@@ -4,9 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.apache.ibatis.mapping.FetchType;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,12 +22,13 @@ import java.util.List;
 public class IdealSelection {
 
     private Long id;
-
     private String title;
     private String body;
     private String filePath;
-    private List<Ideal> idealList;
-    private List<Reply> replyList;
+    @Builder.Default
+    private List<Ideal> idealList = new ArrayList<>();
+    @Builder.Default
+    private List<Reply> replyList = new ArrayList<>();
     private int subCount;
     private User creator;
     private LocalDateTime updateTime;

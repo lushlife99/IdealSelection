@@ -1,10 +1,12 @@
 package com.example.idealselect.entity;
 
+import com.example.idealselect.dto.UserDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -18,7 +20,10 @@ public class User {
     private String userId;
     private String password;
     private String userName;
-    private List<IdealSelection> madeIdealList;
-    private List<Reply> replyList;
+    @Builder.Default
+    private List<IdealSelection> madeIdealList = new ArrayList<>();
+    @Builder.Default
+    private List<Reply> replyList = new ArrayList<>();
+
 
 }

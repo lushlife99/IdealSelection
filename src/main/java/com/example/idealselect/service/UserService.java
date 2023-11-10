@@ -7,8 +7,8 @@ import jakarta.servlet.http.HttpServletResponse;
 
 public interface UserService {
 
-    void join(String userId, String userName, String password, HttpServletRequest request);
-    UserDto login(String userId, String password, HttpServletRequest request, HttpServletResponse response);
+    void join(String userId, String userName, String password);
+    void login(String userId, String password, HttpServletRequest request, HttpServletResponse response);
     void logOut(HttpServletRequest request, HttpServletResponse response);
 
 }
