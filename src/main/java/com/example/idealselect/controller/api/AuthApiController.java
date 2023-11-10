@@ -4,10 +4,7 @@ import com.example.idealselect.service.UserServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/api")
 @RequiredArgsConstructor
@@ -24,5 +21,10 @@ public class AuthApiController {
     @PostMapping("/join")
     public void join(@RequestParam String userId, @RequestParam String userName, @RequestParam String password){
         userService.join(userId, userName, password);
+    }
+
+    @GetMapping("/logOut")
+    public void logOut(HttpServletRequest request, HttpServletResponse response) {
+        userService.logOut(request, response);
     }
 }

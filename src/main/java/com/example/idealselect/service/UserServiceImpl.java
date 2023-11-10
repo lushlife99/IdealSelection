@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void logOut(HttpServletRequest request, HttpServletResponse response) {
-
+        sessionManager.expire(request);
     }
 
 }

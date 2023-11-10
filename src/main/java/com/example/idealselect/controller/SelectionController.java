@@ -27,7 +27,7 @@ public class SelectionController {
         return "main";
     }
 
-    @GetMapping("/myList")
+    @GetMapping("/mySelection")
     public String mySelectionPage(){
 
         return "mySelection";
@@ -37,5 +37,11 @@ public class SelectionController {
     public String playPage(){
 
         return "play";
+    }
+
+    @GetMapping("/create")
+    public String createPage(){
+
+        return "create";
     }
 }

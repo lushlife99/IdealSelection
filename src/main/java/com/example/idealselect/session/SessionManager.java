@@ -32,7 +32,7 @@ public class SessionManager {
         Cookie cookie = findCookie(request, SESSION_COOKIE_NAME);
         if(cookie == null){
             return Optional.empty();
-        }
+        } else if(!sessionStore.containsKey(cookie.getValue())) return Optional.empty();
         return Optional.of(sessionStore.get(cookie.getValue()));
     }
 
