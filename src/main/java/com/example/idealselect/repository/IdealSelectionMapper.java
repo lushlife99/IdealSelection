@@ -16,6 +16,7 @@ public interface IdealSelectionMapper {
     void deleteById(Long id);
     List<IdealSelection> findAll();
     List<IdealSelection> findByCreatorId(Long creatorId);
+    List<IdealSelection> findPageableByCreatorId(Long creatorId, int pageNum);
     List<IdealSelection> findAllBySearchCond(SelectionSearchCond searchCond);
 
 }

@@ -139,6 +139,29 @@
         WHERE selection.creator_id = #{creatorId}
     </select>
 
+    <select id="findPageableByCreatorId" resultMap="IdealSelectionResultMap">
+        SELECT
+            selection.id AS id,
+            selection.title AS title,
+            selection.file_path AS filePath,
+            selection.sub_count AS subCount,
+            selection.creator_id AS creatorId,
+            selection.update_time AS updateTime,
+            ideal.id AS idealList_id,
+            ideal.ideal_name AS idealList_idealName,
+            ideal.win_rate AS idealList_winRate,
+            ideal.win_count AS idealList_winCount,
+            user.id AS creator_id,
+            user.user_id AS creator_userId,
+            user.password AS creator_password,
+            user.user_name AS creator_userName
+        FROM ideal_selection selection
+                 LEFT JOIN ideal ideal ON selection.id = ideal.selection_id
+                 LEFT JOIN user user ON selection.creator_id = user.id
+        WHERE selection.creator_id = #{creatorId}
+        LIMIT #{pageNum}, 10
+    </select>
+
     <select id="findAllBySearchCond" resultMap="IdealSelectionResultMap">
         select id, title, body, file_path, sub_count
         from ideal_selection

@@ -5,6 +5,7 @@ import com.example.idealselect.entity.User;
 import com.example.idealselect.repository.IdealSelectionMapper;
 import com.example.idealselect.repository.UserMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -45,6 +47,16 @@ class SelectionServiceImplTest {
 
         IdealSelection findSelection = selectionMapper.findById(selection.getId()).get();
         log.info("findSelection={}", findSelection);
+    }
+
+    @Test
+    void pageTest() {
+        List<IdealSelection> searchList = selectionMapper.findPageableByCreatorId(47L, 10);
+
+        for (IdealSelection selection : searchList) {
+            System.out.println(selection.getId());
+        }
+
     }
 
 }

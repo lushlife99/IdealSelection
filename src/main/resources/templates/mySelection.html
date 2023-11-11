@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>mySelectionPage</title>
@@ -34,10 +34,83 @@
     </div>
 </nav>
 
+<div class="wrapper wrapper-content " data-cnt="10">
+    <div class="row equal">
+        <div class="col-xs-6 col-sm-3 col-lg-2" style="padding:2px; margin-left: 20px">
+            <div class="ibox">
+                <div class="ibox-content product-box">
+                    <div class="product-imitation" style="height:200px;padding:0px">
+                        <div style="float:left;width:50%;height:180px;background-image: url('https://img.piku.co.kr/w/uploads/54CAfg/a0b5e7a7b7a1218f9e5fc7b0822ba559.jpg');background-repeat:no-repeat;background-size: cover;background-position: center top;display:flex;">
+                        </div>
+                        <div style="width:50%;height:180px;background-image: url('https://img.piku.co.kr/w/uploads/54CAfg/9eab5c730645b3d8352a558c30f1b36a.jpg');background-repeat:no-repeat;background-size: cover;background-position: center top;display:flex;">
+                        </div>
+                        <div style="float:left;color:#676a6c;width:50%;max-height:20px;overflow: hidden; text-overflow: ellipsis;white-space: nowrap;display:inline-block;">btn_plus_pressed</div>
+                        <div style="color:#676a6c;width:50%;max-height:20px;overflow: hidden; text-overflow: ellipsis;white-space: nowrap;display:inline-block;">btn_plus_pressed</div>
+                    </div>
+                    <div class="product-desc" style="cursor:Pointer" data-id="54CAfg">
+                        <a href="#" class="product-name" th:text="${selectionList.get(0).getTitle()}">title</a>
+                        <div class="small m-t-xs" th:text="${selectionList.get(0).getTitle()}">body</div>
+                        <div class="m-t text-righ">
+                            <div class="btn-group" data-id="54CAfg">
+                                <button type="button" class="btn btn-sm btn-outline btn-info fedit"><i class="fa fa-edit"></i> 수정</button>
+                                <button type="button" class="btn btn-sm btn-outline btn-primary fdelete"><i class="fa fa-trash"></i> 삭제</button>
+                            </div>
+                            <div class="input-group divshare" style="display:none">
+                                <span class="input-group-btn">
+                                <button type="button" class="btn btn-sm btn-success fcopy"><i class="fa fa-copy"></i>복사</button>
+                                </span>
+                                <input type="text" class="form-control input-sm shareurl" value="https://www.piku.co.kr/w/54CAfg">
+                            </div>
+                            <div class="sharemsg"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+<!--        <div class="col-xs-6 col-sm-3 col-lg-2" style="padding:2px">-->
+<!--            <div class="ibox">-->
+<!--                <div class="ibox-content product-box">-->
+<!--                    <div class="product-imitation" style="height:200px;padding:0px">-->
+<!--                        <div style="float:left;width:50%;height:180px;background-image: url('https://img.piku.co.kr/w/uploads/6t8cwA/a1db758978680ead0eeb1312caa553fe.jpg');background-repeat:no-repeat;background-size: cover;background-position: center top;display:flex;">-->
+<!--                        </div>-->
+<!--                        <div style="width:50%;height:180px;background-image: url('https://img.piku.co.kr/w/uploads/6t8cwA/2340a96302dd5ddd8157531527e96e62.jpg');background-repeat:no-repeat;background-size: cover;background-position: center top;display:flex;">-->
+<!--                        </div>-->
+<!--                        <div style="float:left;color:#676a6c;width:50%;max-height:20px;overflow: hidden; text-overflow: ellipsis;white-space: nowrap;display:inline-block;">btn_plus_pressed</div>-->
+<!--                        <div style="color:#676a6c;width:50%;max-height:20px;overflow: hidden; text-overflow: ellipsis;white-space: nowrap;display:inline-block;">btn_plus_pressed</div>-->
+<!--                    </div>-->
+<!--                    <div class="product-desc" style="cursor:Pointer" data-id="6t8cwA">-->
+
+<!--                        <a href="#" class="product-name">ㅁㄴㅇㄹ</a>-->
+<!--                        <div class="small m-t-xs">ㄴㅁㅇㄹ</div>-->
+<!--                        <div class="m-t text-righ">-->
+<!--                            <div class="btn-group" data-id="6t8cwA">-->
+<!--                                <a href="https://www.piku.co.kr/w/6t8cwA" class="btn btn-sm btn-outline btn-danger"><i class="fa fa-play"></i> 시작하기</a>-->
+<!--                                <a href="https://www.piku.co.kr/w/rank/6t8cwA" class="btn btn-sm btn-outline btn-warning frank"><i class="fa fa-list-ol"></i> 랭킹보기</a>-->
+<!--                                <button type="button" class="btn btn-sm btn-outline btn-success fshare"><i class="fa fa-share"></i> 공유</button>-->
+<!--                                <button type="button" class="btn btn-sm btn-outline btn-info fedit"><i class="fa fa-edit"></i> 수정</button>-->
+<!--                                <button type="button" class="btn btn-sm btn-outline btn-primary fdelete"><i class="fa fa-trash"></i> 삭제</button>-->
+<!--                            </div>-->
+<!--                            <div class="input-group divshare" style="display:none">-->
+<!--                                <span class="input-group-btn">-->
+<!--                                <button type="button" class="btn btn-sm btn-success fcopy"><i class="fa fa-copy"></i>복사</button>-->
+<!--                                </span>-->
+<!--                                <input type="text" class="form-control input-sm shareurl" value="https://www.piku.co.kr/w/6t8cwA">-->
+<!--                            </div>-->
+<!--                            <div class="sharemsg"></div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+    </div>
+</div>
+
 </body>
 </html>
 
 <script th:inline="javascript">
+
+    console.log([[${selectionList.get(0).getTitle}]])
     function logout() {
         $.ajax({
             type: 'GET',

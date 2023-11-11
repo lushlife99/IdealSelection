@@ -31,14 +31,8 @@ public class SelectionController {
     public String mySelectionPage(Model model, HttpServletRequest request){
         if (sessionManager.getSession(request).isEmpty())
             return "redirect:/login";
-        List<IdealSelectionDto> creationList = selectionService.getCreationList(request);
 
-        for (IdealSelectionDto idealSelectionDto : creationList) {
-            System.out.println(creationList);
-            System.out.println();
-        }
         model.addAttribute("selectionList", selectionService.getCreationList(request));
-
         return "mySelection";
     }
 
