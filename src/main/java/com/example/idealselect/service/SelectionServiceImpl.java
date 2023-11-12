@@ -106,9 +106,9 @@ public class SelectionServiceImpl implements IdealSelectionService{
     }
 
     @Override
-    public List<IdealSelectionDto> getCreationList(HttpServletRequest request) {
+    public List<IdealSelectionDto> getCreationList(int pagePrefix, HttpServletRequest request) {
         User user = sessionManager.getSession(request).get();
-        List<IdealSelection> selectionList = selectionMapper.findByCreatorId(user.getId());
+        List<IdealSelection> selectionList = selectionMapper.findPageableByCreatorId(user.getId(), 10 * pagePrefix);
 
         List<IdealSelectionDto> dtoList = new ArrayList<>();
         for (IdealSelection selection : selectionList) {

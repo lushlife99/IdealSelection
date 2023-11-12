@@ -161,7 +161,7 @@
             SELECT id FROM (
             SELECT id FROM ideal_selection
             WHERE creator_id = #{creatorId}
-            limit #{pageNum}, 10
+            limit #{pageNum}, 100
             ) AS creator_id
             );
     </select>

@@ -14,6 +14,6 @@ public class IdealSelectApplication {
 
 //    @Bean
 //    public DataInit testDataInit() {
-//        return new TestDataInit(itemRepository);
+//        return new TestDataInit();
 //    }
 }

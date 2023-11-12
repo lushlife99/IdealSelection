@@ -12,12 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
 
 @Slf4j
 @Transactional
@@ -54,21 +51,33 @@ class SelectionServiceImplTest {
     void pageTest() {
         userMapper.save(user);
 
-        List<IdealSelection> idealSelectionList = new ArrayList<>();
-        for(int i = 0; i < 11; i++){
+        for(int i = 0; i < 111; i++){
             IdealSelection selection = IdealSelection.builder().title(TITLE).body(BODY).creator(user).subCount(0).filePath(UUID.randomUUID().toString()).updateTime(LocalDateTime.now()).build();
-            idealSelectionList.add(selection);
             selectionMapper.save(selection);
         }
 
 
         List<IdealSelection> searchList1 = selectionMapper.findPageableByCreatorId(user.getId(), 0);
-        List<IdealSelection> searchList2 = selectionMapper.findPageableByCreatorId(user.getId(), 10);
+        List<IdealSelection> searchList2 = selectionMapper.findPageableByCreatorId(user.getId(), 100);
 
 
-        Assertions.assertThat(searchList1.size()).isEqualTo(10);
-        Assertions.assertThat(searchList2.size()).isEqualTo(1);
+        Assertions.assertThat(searchList1.size()).isEqualTo(100);
+        Assertions.assertThat(searchList2.size()).isEqualTo(11);
 
     }
+
+//    @Test
+//    void insert100IdealSelection() {
+//        User user = userMapper.findById(47L).get();
+//
+//        for(int i = 0; i < 100; i++){
+//            IdealSelection selection = IdealSelection.builder().title(TITLE).body(BODY).creator(user).subCount(0).filePath(UUID.randomUUID().toString()).updateTime(LocalDateTime.now()).build();
+//            selectionMapper.save(selection);
+//        }
+//
+//
+//
+//
+//    }
 
 }

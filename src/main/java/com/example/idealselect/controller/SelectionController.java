@@ -1,6 +1,5 @@
 package com.example.idealselect.controller;
 
-import com.example.idealselect.dto.IdealSelectionDto;
 import com.example.idealselect.service.IdealSelectionService;
 import com.example.idealselect.session.SessionManager;
 import jakarta.servlet.http.HttpServletRequest;
@@ -8,8 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
@@ -28,11 +26,12 @@ public class SelectionController {
     }
 
     @GetMapping("/mySelection")
-    public String mySelectionPage(Model model, HttpServletRequest request){
+    public String mySelectionPage(@RequestParam(value = "pagePrefix", required = false, defaultValue = "0") Integer pagePrefix, Model model, HttpServletRequest request){
         if (sessionManager.getSession(request).isEmpty())
             return "redirect:/login";
 
-        model.addAttribute("selectionList", selectionService.getCreationList(request));
+        model.addAttribute("selectionList", selectionService.getCreationList(pagePrefix, request));
+        model.addAttribute("pagePrefix", pagePrefix);
         return "mySelection";
     }
 

@@ -19,5 +19,5 @@ public interface IdealSelectionService {
     void updateWinRate(Long idealSelectionId, Long winIdealId, Long defeatIdealId, HttpServletRequest request);
     void updateWinCount(Long idealSelectionId, Long idealId, HttpServletRequest request);
     void updateSubCount(Long idealSelectionId, HttpServletRequest request);
-    List<IdealSelectionDto> getCreationList(HttpServletRequest request);
+    List<IdealSelectionDto> getCreationList(int page, HttpServletRequest request);
 }
