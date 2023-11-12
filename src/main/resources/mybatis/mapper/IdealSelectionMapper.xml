@@ -142,6 +142,7 @@
     <select id="findPageableByCreatorId" resultMap="IdealSelectionResultMap">
         SELECT selection.id          AS id,
                selection.title       AS title,
+               selection.body        AS body,
                selection.file_path   AS filePath,
                selection.sub_count   AS subCount,
                selection.creator_id  AS creatorId,
@@ -169,6 +170,7 @@
     <select id="findAllBySearchCond" resultMap="IdealSelectionResultMap">
         SELECT selection.id          AS id,
         selection.title       AS title,
+        selection.body        AS body,
         selection.file_path   AS filePath,
         selection.sub_count   AS subCount,
         selection.creator_id  AS creatorId,
