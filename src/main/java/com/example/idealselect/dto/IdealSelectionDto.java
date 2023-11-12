@@ -28,10 +28,12 @@ public class IdealSelectionDto {
     private List<Ideal> idealList;
     private List<Reply> replyList;
     private LocalDateTime updateTime;
-    private List<String> imgList = new ArrayList<>();
+    private String img1;
+    private String img2;
+
 
     public IdealSelectionDto(IdealSelection selection){
-        this.id = id;
+        this.id = selection.getId();
         this.title = selection.getTitle();
         this.body = selection.getBody();
         this.filePath = selection.getFilePath();
@@ -40,8 +42,10 @@ public class IdealSelectionDto {
         this.replyList = selection.getReplyList();
         this.creator = selection.getCreator();
         this.updateTime = selection.getUpdateTime();
-        this.imgList = new ArrayList<>();
+        if(idealList.size() > 1) {
+            this.img1 = selection.getFilePath() + "/" + selection.getIdealList().get(0).getIdealName();
+            this.img2 = selection.getFilePath() + "/" + selection.getIdealList().get(1).getIdealName();
+        }
 
-        
     }
 }

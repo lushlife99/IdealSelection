@@ -13,6 +13,10 @@ import com.example.idealselect.session.SessionManager;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.naming.spi.DirectoryManager;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -69,8 +74,7 @@ public class SelectionServiceImpl implements IdealSelectionService{
             for (MultipartFile file : files) {
                 String name = file.getOriginalFilename();
                 Path imagePath = Paths.get(path.toString(), name);
-                file.transferTo(new File(imagePath.toString())); //여기서 오류
-
+                file.transferTo(new File(imagePath.toString()));
                 Ideal ideal = Ideal.builder().idealName(name).winRate(0.0).winCount(0).selection(selection).build();
                 idealList.add(ideal);
             }
@@ -123,5 +127,17 @@ public class SelectionServiceImpl implements IdealSelectionService{
         }
 
         return dtoList;
+    }
+
+    public byte[] getIdealImg(String imageName, String imageName2) throws IOException {
+
+        Path imagePath = Paths.get(rootFilePath, imageName, imageName2);
+        Resource imageResource = new UrlResource(imagePath.toUri());
+        if (imageResource.exists()) {
+            return Files.readAllBytes(imagePath);
+        } else {
+            throw new CustomException(ErrorCode.FILE_NOT_FOUND);
+        }
+
     }
 }

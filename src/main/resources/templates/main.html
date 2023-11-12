@@ -170,10 +170,20 @@
 
             // Background images
             var img1Div = document.createElement('div');
-            img1Div.style = 'float: left; width: 50%; height: 180px; background-image: url(\'' + selection.img1 + '\'); background-repeat: no-repeat; background-size: cover; background-position: center top; display: flex;';
+            if (selection.img1) {
+                img1Div.style = 'float: left; width: 50%; height: 180px; background-image: url(/api/selection/image/' + selection.img1 + '); background-repeat: no-repeat; background-size: cover; background-position: center top; display: flex;';
+            } else {
+                // 이미지가 없을 경우에 대한 처리
+                img1Div.style = 'float: left; width: 50%; height: 180px; background-color: #ccc;'; // 또는 다른 기본 스타일을 지정
+            }
 
             var img2Div = document.createElement('div');
-            img2Div.style = 'width: 50%; height: 180px; background-image: url(\'' + selection.img2 + '\'); background-repeat: no-repeat; background-size: cover; background-position: center top; display: flex;';
+            if (selection.img2) {
+                img2Div.style = 'float: left; width: 50%; height: 180px; background-image: url(/api/selection/image/' + selection.img2 + '); background-repeat: no-repeat; background-size: cover; background-position: center top; display: flex;';
+            } else {
+                // 이미지가 없을 경우에 대한 처리
+                img2Div.style = 'float: left; width: 50%; height: 180px; background-color: #ccc;'; // 또는 다른 기본 스타일을 지정
+            }
 
             productImitationDiv.appendChild(img1Div);
             productImitationDiv.appendChild(img2Div);

@@ -20,4 +20,5 @@ public interface IdealSelectionService {
     void updateWinCount(Long idealSelectionId, Long idealId, HttpServletRequest request);
     void updateSubCount(Long idealSelectionId, HttpServletRequest request);
     List<IdealSelectionDto> getCreationList(int page, HttpServletRequest request);
+    byte[] getIdealImg(String imageName, String imageName2) throws IOException;
 }
