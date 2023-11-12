@@ -36,10 +36,10 @@
     </resultMap>
 
     <sql id="dynamicOrderBy">
-        <if test="orderType == null or orderType == 'POPULARITY'">
+        <if test="searchCond.orderType == null or searchCond.orderType == 'POPULARITY'">
             ORDER BY sub_count DESC
         </if>
-        <if test="orderType == 'LATEST'">
+        <if test="searchCond.orderType == 'LATEST'">
             ORDER BY update_time DESC
         </if>
     </sql>
@@ -170,11 +170,12 @@
         select id, title, body, file_path, sub_count
         from ideal_selection
         <where>
-            <if test="title != null">
+            <if test="searchCond.title != null">
                 and title like concat('%', #{title}, '%')
             </if>
         </where>
         <include refid="dynamicOrderBy"></include>
+        limit #{pageNum}, 100
     </select>
 
 </mapper>

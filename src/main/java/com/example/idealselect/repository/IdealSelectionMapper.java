@@ -17,6 +17,6 @@ public interface IdealSelectionMapper {
     List<IdealSelection> findAll();
     List<IdealSelection> findByCreatorId(Long creatorId);
     List<IdealSelection> findPageableByCreatorId(Long creatorId, int pageNum);
-    List<IdealSelection> findAllBySearchCond(SelectionSearchCond searchCond);
+    List<IdealSelection> findAllBySearchCond(SelectionSearchCond searchCond, int pageNum);
 
 }

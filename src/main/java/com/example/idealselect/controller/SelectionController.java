@@ -1,5 +1,6 @@
 package com.example.idealselect.controller;
 
+import com.example.idealselect.dto.IdealSelectionDto;
 import com.example.idealselect.service.IdealSelectionService;
 import com.example.idealselect.session.SessionManager;
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,6 +10,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+
 @Controller
 @RequiredArgsConstructor
 public class SelectionController {
@@ -17,11 +20,12 @@ public class SelectionController {
     private final SessionManager sessionManager;
 
     @GetMapping("/main")
-    public String mainPage(Model model, HttpServletRequest request){
+    public String mainPage(@RequestParam(value = "pagePrefix", required = false, defaultValue = "0") Integer pagePrefix, Model model, HttpServletRequest request){
         if (sessionManager.getSession(request).isEmpty())
             return "redirect:/login";
 
-        model.addAttribute("selectionList",selectionService.getByPopularity(request));
+        model.addAttribute("selectionList",selectionService.getByPopularity(pagePrefix, request));
+        model.addAttribute("pagePrefix", pagePrefix);
         return "main";
     }
 

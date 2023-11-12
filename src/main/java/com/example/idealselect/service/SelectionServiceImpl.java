@@ -8,6 +8,7 @@ import com.example.idealselect.exception.CustomException;
 import com.example.idealselect.exception.ErrorCode;
 import com.example.idealselect.repository.IdealMapper;
 import com.example.idealselect.repository.IdealSelectionMapper;
+import com.example.idealselect.repository.SelectionSearchCond;
 import com.example.idealselect.session.SessionManager;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -37,8 +38,14 @@ public class SelectionServiceImpl implements IdealSelectionService{
     private String rootFilePath;
 
     @Override
-    public List<IdealSelectionDto> getByPopularity(HttpServletRequest request) {
-        return null;
+    public List<IdealSelectionDto> getByPopularity(Integer pageNum, HttpServletRequest request) {
+        List<IdealSelection> selectionList = selectionMapper.findAllBySearchCond(new SelectionSearchCond("", "POPULARITY"), 10 * pageNum);
+        List<IdealSelectionDto> dtoList = new ArrayList<>();
+        for (IdealSelection selection : selectionList) {
+            dtoList.add(new IdealSelectionDto(selection));
+        }
+
+        return dtoList;
     }
 
     @Override

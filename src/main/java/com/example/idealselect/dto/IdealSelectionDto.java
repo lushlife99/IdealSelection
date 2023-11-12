@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
@@ -27,6 +28,7 @@ public class IdealSelectionDto {
     private List<Ideal> idealList;
     private List<Reply> replyList;
     private LocalDateTime updateTime;
+    private List<String> imgList = new ArrayList<>();
 
     public IdealSelectionDto(IdealSelection selection){
         this.id = id;
@@ -38,5 +40,8 @@ public class IdealSelectionDto {
         this.replyList = selection.getReplyList();
         this.creator = selection.getCreator();
         this.updateTime = selection.getUpdateTime();
+        this.imgList = new ArrayList<>();
+
+        
     }
 }

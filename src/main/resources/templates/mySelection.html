@@ -30,6 +30,30 @@
             background-color: #007BFF;
             color: #fff;
         }
+
+        .row.equal > [class*='col-'] {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .row.equal {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .row.equal [class*='col-'] > .ibox-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .row.equal .product-imitation {
+            flex: 1;
+        }
+
+        .row.equal .product-desc {
+            flex: 1;
+        }
     </style>
 </head>
 <body>
@@ -54,102 +78,149 @@
                 <a class="nav-link" href="#" onclick="logout()">로그아웃</a>
             </li>
         </ul>
-
     </div>
 </nav>
 
-<div class="wrapper wrapper-content " data-cnt="10">
-    <div class="row equal">
-        <div class="col-xs-6 col-sm-3 col-lg-2" style="padding:2px; margin-left: 20px">
-            <div class="ibox">
-                <div class="ibox-content product-box">
-                    <div class="product-imitation" style="height:200px;padding:0px">
-                        <div style="float:left;width:50%;height:180px;background-image: url('https://img.piku.co.kr/w/uploads/54CAfg/a0b5e7a7b7a1218f9e5fc7b0822ba559.jpg');background-repeat:no-repeat;background-size: cover;background-position: center top;display:flex;">
-                        </div>
-                        <div style="width:50%;height:180px;background-image: url('https://img.piku.co.kr/w/uploads/54CAfg/9eab5c730645b3d8352a558c30f1b36a.jpg');background-repeat:no-repeat;background-size: cover;background-position: center top;display:flex;">
-                        </div>
-                        <div style="float:left;color:#676a6c;width:50%;max-height:20px;overflow: hidden; text-overflow: ellipsis;white-space: nowrap;display:inline-block;">btn_plus_pressed</div>
-                        <div style="color:#676a6c;width:50%;max-height:20px;overflow: hidden; text-overflow: ellipsis;white-space: nowrap;display:inline-block;">btn_plus_pressed</div>
-                    </div>
-                    <div class="product-desc" style="cursor:Pointer" data-id="54CAfg">
-                        <a href="#" class="product-name" th:text="${selectionList.get(0).getTitle()}">title</a>
-                        <div class="small m-t-xs" th:text="${selectionList.get(0).getTitle()}">body</div>
-                        <div class="m-t text-righ">
-                            <div class="btn-group" data-id="54CAfg">
-                                <button type="button" class="btn btn-sm btn-outline btn-info fedit"><i class="fa fa-edit"></i> 수정</button>
-                                <button type="button" class="btn btn-sm btn-outline btn-primary fdelete"><i class="fa fa-trash"></i> 삭제</button>
-                            </div>
-                            <div class="input-group divshare" style="display:none">
-                                <span class="input-group-btn">
-                                <button type="button" class="btn btn-sm btn-success fcopy"><i class="fa fa-copy"></i>복사</button>
-                                </span>
-                                <input type="text" class="form-control input-sm shareurl" value="https://www.piku.co.kr/w/54CAfg">
-                            </div>
-                            <div class="sharemsg"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+<div id="content" class="row equal">
+    <!-- Content will be dynamically updated here -->
 </div>
-
 
 <ul class="pagination mt-5" id="pagination" th:with="num=(${selectionList.size() % 10 == 0} ? ${selectionList.size() / 10} : ${selectionList.size() / 10 + 1})">
     <li th:if="${pagePrefix != 0}">
         <a href="#" onclick="changePage('prev')">이전</a>
     </li>
-    <li th:each="i : ${#numbers.sequence(1, num)}" >
+    <li th:each="i : ${#numbers.sequence(1, num)}">
         <a href="#" th:attr="onclick='changePage(' + ${i} + ')'" th:text="(${pagePrefix} + ${i})">0</a>
     </li>
     <li th:if="${selectionList.size() == 100}">
         <a href="#" onclick="changePage('next')">다음</a>
     </li>
 </ul>
-</body>
-</html>
 
 <script th:inline="javascript">
-
+    var selectionList = [[ ${selectionList} ]];
     var currentPage = 1;
-    function changePage(page) {
-        if (page === 'prev'){
-            getPrevPaginationList();
-        }
-        else if (page === 'next'){
-            getNextPaginationList();
-        }
+    var itemsPerPage = 10;
 
-        else if (typeof page === 'number') {
+    function changePage(page) {
+        if (page === 'prev') {
+            getPrevPaginationList();
+        } else if (page === 'next') {
+            getNextPaginationList();
+        } else if (typeof page === 'number') {
             console.log(page);
             currentPage = page;
         }
 
         // Update the active state of the pagination buttons.
         updatePagination();
+        updateContent();
     }
+
+    function updateContent() {
+        var startIdx = (currentPage - 1) * itemsPerPage;
+        var endIdx = startIdx + itemsPerPage;
+
+        var contentDiv = document.getElementById('content');
+        contentDiv.innerHTML = '';
+
+        var rowDiv;
+        for (var i = startIdx; i < endIdx && i < selectionList.length; i++) {
+            var selection = selectionList[i];
+
+            if (i % 5 === 0) {
+                rowDiv = document.createElement('div');
+                rowDiv.className = 'row equal';
+            }
+
+            // Create HTML elements dynamically
+            var colDiv = document.createElement('div');
+            colDiv.className = 'col-xs-6 col-sm-3 col-lg-2';
+
+            var iboxContentDiv = document.createElement('div');
+            iboxContentDiv.className = 'ibox-content product-box';
+
+            var productImitationDiv = document.createElement('div');
+            productImitationDiv.className = 'product-imitation';
+            productImitationDiv.style = 'height: 200px; padding: 0px;';
+
+            // Background images
+            var img1Div = document.createElement('div');
+            img1Div.style = 'float: left; width: 50%; height: 180px; background-image: url(\'' + selection.img1 + '\'); background-repeat: no-repeat; background-size: cover; background-position: center top; display: flex;';
+
+            var img2Div = document.createElement('div');
+            img2Div.style = 'width: 50%; height: 180px; background-image: url(\'' + selection.img2 + '\'); background-repeat: no-repeat; background-size: cover; background-position: center top; display: flex;';
+
+            productImitationDiv.appendChild(img1Div);
+            productImitationDiv.appendChild(img2Div);
+
+            var productDescDiv = document.createElement('div');
+            productDescDiv.className = 'product-desc';
+            productDescDiv.style = 'cursor: pointer';
+            productDescDiv.setAttribute('data-id', selection.id);
+
+            // Other elements
+            var productNameAnchor = document.createElement('a');
+            productNameAnchor.className = 'product-name';
+            productNameAnchor.href = '#';
+            productNameAnchor.innerHTML = selection.title;
+
+            var smallDiv = document.createElement('div');
+            smallDiv.className = 'small m-t-xs';
+            smallDiv.innerHTML = selection.body;
+
+            // Edit and delete buttons
+            var btnGroupDiv = document.createElement('div');
+            btnGroupDiv.className = 'btn-group';
+            btnGroupDiv.setAttribute('data-id', selection.id);
+
+            var editButton = document.createElement('button');
+            editButton.type = 'button';
+            editButton.className = 'btn btn-sm btn-outline btn-info fedit';
+            editButton.innerHTML = '<i class="fa fa-edit"></i> 수정';
+
+            var deleteButton = document.createElement('button');
+            deleteButton.type = 'button';
+            deleteButton.className = 'btn btn-sm btn-outline btn-primary fdelete';
+            deleteButton.innerHTML = '<i class="fa fa-trash"></i> 삭제';
+
+            btnGroupDiv.appendChild(editButton);
+            btnGroupDiv.appendChild(deleteButton);
+
+            // Append everything to the container div
+            productDescDiv.appendChild(productNameAnchor);
+            productDescDiv.appendChild(smallDiv);
+            productDescDiv.appendChild(btnGroupDiv);
+
+            iboxContentDiv.appendChild(productImitationDiv);
+            iboxContentDiv.appendChild(productDescDiv);
+            colDiv.appendChild(iboxContentDiv);
+
+            rowDiv.appendChild(colDiv);
+            contentDiv.appendChild(rowDiv);
+        }
+    }
+
 
     function getNextPaginationList() {
         console.log("next");
-        window.location.href = '/mySelection?pagePrefix=' + [[${pagePrefix + 10}]];
+        window.location.href = '/mySelection?pagePrefix=' + (parseInt([[${pagePrefix}]]) + 10);
     }
 
     function getPrevPaginationList() {
-        console.log("next");
-        window.location.href = '/mySelection?pagePrefix=' + [[${pagePrefix - 10}]];
+        console.log("prev");
+        window.location.href = '/mySelection?pagePrefix=' + (parseInt([[${pagePrefix}]]) - 10);
     }
-
 
     function updatePagination() {
         var paginationLinks = document.querySelectorAll('.pagination a');
-        paginationLinks.forEach(function(link) {
+        paginationLinks.forEach(function (link) {
             link.classList.remove('active');
             if (link.innerHTML == currentPage) {
                 link.classList.add('active');
             }
         });
     }
-
 
     function logout() {
         $.ajax({
@@ -165,9 +236,8 @@
         });
     }
 
-
-    function changeSelection(){
-
+    function changeSelection() {
+        // Implement if needed
     }
 
     function sortByPopularity() {
@@ -184,3 +254,5 @@
 
     changePage(1);
 </script>
+</body>
+</html>

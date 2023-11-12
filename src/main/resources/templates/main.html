@@ -8,10 +8,52 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <style>
-        .custom-container {
-            min-width: 1000px; /* Set the minimum height as needed */
+        .pagination {
+            display: flex;
+            list-style: none;
+            padding: 0;
         }
 
+        .pagination li {
+            margin: 0 5px;
+        }
+
+        .pagination a {
+            text-decoration: none;
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            color: #333;
+        }
+
+        .pagination .active {
+            background-color: #007BFF;
+            color: #fff;
+        }
+
+        .row.equal > [class*='col-'] {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .row.equal {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .row.equal [class*='col-'] > .ibox-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .row.equal .product-imitation {
+            flex: 1;
+        }
+
+        .row.equal .product-desc {
+            flex: 1;
+        }
     </style>
 </head>
 <body>
@@ -61,15 +103,154 @@
 </div>
 
 
-</body>
-</html>
 
-<!-- JavaScript for handling logout, sorting, and searching -->
+<div id="content" class="row equal">
+    <!-- Content will be dynamically updated here -->
+</div>
+
+<ul class="pagination mt-5" id="pagination" th:with="num=(${selectionList == null ? 0 : (selectionList.size() % 10 == 0 ? selectionList.size() / 10 : selectionList.size() / 10 + 1)})">
+
+    <li th:if="${pagePrefix != 0}">
+        <a href="#" onclick="changePage('prev')">이전</a>
+    </li>
+    <li th:each="i : ${#numbers.sequence(1, num)}">
+        <a href="#" th:attr="onclick='changePage(' + ${i} + ')'" th:text="(${pagePrefix} + ${i})">0</a>
+    </li>
+    <li th:if="${selectionList.size() == 100}">
+        <a href="#" onclick="changePage('next')">다음</a>
+    </li>
+</ul>
+
 <script th:inline="javascript">
+    var selectionList = [[ ${selectionList} ]];
+    var currentPage = 1;
+    var itemsPerPage = 10;
+
+    function changePage(page) {
+        if (page === 'prev') {
+            getPrevPaginationList();
+        } else if (page === 'next') {
+            getNextPaginationList();
+        } else if (typeof page === 'number') {
+            console.log(page);
+            currentPage = page;
+        }
+
+        // Update the active state of the pagination buttons.
+        //updatePagination();
+        updateContent();
+    }
+
+    function updateContent() {
+        var startIdx = (currentPage - 1) * itemsPerPage;
+        var endIdx = startIdx + itemsPerPage;
+
+        var contentDiv = document.getElementById('content');
+        contentDiv.innerHTML = '';
+
+        var rowDiv;
+        for (var i = startIdx; i < endIdx && i < selectionList.length; i++) {
+            var selection = selectionList[i];
+
+            if (i % 5 === 0) {
+                rowDiv = document.createElement('div');
+                rowDiv.className = 'row equal';
+            }
+
+            // Create HTML elements dynamically
+            var colDiv = document.createElement('div');
+            colDiv.className = 'col-xs-6 col-sm-3 col-lg-2';
+
+            var iboxContentDiv = document.createElement('div');
+            iboxContentDiv.className = 'ibox-content product-box';
+
+            var productImitationDiv = document.createElement('div');
+            productImitationDiv.className = 'product-imitation';
+            productImitationDiv.style = 'height: 200px; padding: 0px;';
+
+            // Background images
+            var img1Div = document.createElement('div');
+            img1Div.style = 'float: left; width: 50%; height: 180px; background-image: url(\'' + selection.img1 + '\'); background-repeat: no-repeat; background-size: cover; background-position: center top; display: flex;';
+
+            var img2Div = document.createElement('div');
+            img2Div.style = 'width: 50%; height: 180px; background-image: url(\'' + selection.img2 + '\'); background-repeat: no-repeat; background-size: cover; background-position: center top; display: flex;';
+
+            productImitationDiv.appendChild(img1Div);
+            productImitationDiv.appendChild(img2Div);
+
+            var productDescDiv = document.createElement('div');
+            productDescDiv.className = 'product-desc';
+            productDescDiv.style = 'cursor: pointer';
+            productDescDiv.setAttribute('data-id', selection.id);
+
+            // Other elements
+            var productNameAnchor = document.createElement('a');
+            productNameAnchor.className = 'product-name';
+            productNameAnchor.href = '#';
+            productNameAnchor.innerHTML = selection.title;
+
+            var smallDiv = document.createElement('div');
+            smallDiv.className = 'small m-t-xs';
+            smallDiv.innerHTML = selection.body;
+
+            // Edit and delete buttons
+            var btnGroupDiv = document.createElement('div');
+            btnGroupDiv.className = 'btn-group';
+            btnGroupDiv.setAttribute('data-id', selection.id);
+
+
+            var startButton = document.createElement('button');
+            startButton.type = 'button';
+            startButton.className = 'btn btn-sm btn-outline btn-danger';
+            startButton.innerHTML = '<i class="fa fa-edit"></i> 시작하기';
+
+            var rankingButton = document.createElement('button');
+            rankingButton.type = 'button';
+            rankingButton.className = 'btn btn-sm btn-outline btn-primary fdelete';
+            rankingButton.innerHTML = '<i class="fa fa-trash"></i> 랭킹보기';
+
+            btnGroupDiv.appendChild(startButton);
+            btnGroupDiv.appendChild(rankingButton);
+
+            // Append everything to the container div
+            productDescDiv.appendChild(productNameAnchor);
+            productDescDiv.appendChild(smallDiv);
+            productDescDiv.appendChild(btnGroupDiv);
+
+            iboxContentDiv.appendChild(productImitationDiv);
+            iboxContentDiv.appendChild(productDescDiv);
+            colDiv.appendChild(iboxContentDiv);
+
+            rowDiv.appendChild(colDiv);
+            contentDiv.appendChild(rowDiv);
+        }
+    }
+
+
+    function getNextPaginationList() {
+        console.log("next");
+        window.location.href = '/main?pagePrefix=' + (parseInt([[${pagePrefix}]]) + 10);
+    }
+
+    function getPrevPaginationList() {
+        console.log("prev");
+        window.location.href = '/main?pagePrefix=' + (parseInt([[${pagePrefix}]]) - 10);
+    }
+
+    function updatePagination() {
+        var paginationLinks = document.querySelectorAll('.pagination a');
+        paginationLinks.forEach(function (link) {
+            link.classList.remove('active');
+            if (link.innerHTML == currentPage) {
+                link.classList.add('active');
+            }
+        });
+    }
+
     function logout() {
         $.ajax({
             type: 'GET',
-            url: '/api/logOut',  // 실제 로그인 엔드포인트로 변경
+            url: '/api/logOut',
             success: function (response) {
                 alert("로그아웃");
                 window.location.href = '/login';
@@ -78,6 +259,10 @@
                 alert(error.responseJSON.message);
             }
         });
+    }
+
+    function changeSelection() {
+        // Implement if needed
     }
 
     function sortByPopularity() {
@@ -91,6 +276,9 @@
     function search() {
         alert("검색 기능 구현");
     }
+
+    changePage(1);
 </script>
 </body>
 </html>
+
