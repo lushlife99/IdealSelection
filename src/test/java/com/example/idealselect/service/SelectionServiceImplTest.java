@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -51,11 +52,22 @@ class SelectionServiceImplTest {
 
     @Test
     void pageTest() {
-        List<IdealSelection> searchList = selectionMapper.findPageableByCreatorId(47L, 10);
+        userMapper.save(user);
 
-        for (IdealSelection selection : searchList) {
-            System.out.println(selection.getId());
+        List<IdealSelection> idealSelectionList = new ArrayList<>();
+        for(int i = 0; i < 11; i++){
+            IdealSelection selection = IdealSelection.builder().title(TITLE).body(BODY).creator(user).subCount(0).filePath(UUID.randomUUID().toString()).updateTime(LocalDateTime.now()).build();
+            idealSelectionList.add(selection);
+            selectionMapper.save(selection);
         }
+
+
+        List<IdealSelection> searchList1 = selectionMapper.findPageableByCreatorId(user.getId(), 0);
+        List<IdealSelection> searchList2 = selectionMapper.findPageableByCreatorId(user.getId(), 10);
+
+
+        Assertions.assertThat(searchList1.size()).isEqualTo(10);
+        Assertions.assertThat(searchList2.size()).isEqualTo(1);
 
     }
 
