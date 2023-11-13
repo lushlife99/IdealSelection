@@ -16,7 +16,7 @@ public class Ideal {
     private String idealName;
     private Double winRate;
     private Integer winCount;
-    private IdealSelection selection;
+    private Long selectionId;
 
     public Ideal(IdealDto idealDto){
         this.idealName = idealDto.getIdealName();

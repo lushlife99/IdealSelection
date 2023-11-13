@@ -56,7 +56,7 @@
       <input type="file" th:attr="data-id=${ideal.id}" class="file"/>
     </td>
     <td>
-      <button th:attr="data-id=${ideal.id}" class="delete-btn">이상형 삭제</button>
+      <button th:attr="delete-btn-id=${ideal.id}" class="delete-btn">이상형 삭제</button>
     </td>
   </tr>
   </tbody>
@@ -80,6 +80,15 @@
     })
   }
 
+  var deleteBtn = document.getElementsByClassName('delete-btn');
+  for (const deleteBtnElement of deleteBtn) {
+    deleteBtnElement.addEventListener("click", function (event){
+      deleteBtnOnClicked(event);
+    })
+
+
+  }
+
   function handleFileChange(event) {
     console.log("asdfasdf");
     var fileInput = event.target;
@@ -99,8 +108,6 @@
       success: function(response) {
         var idealId = event.target.getAttribute('data-id');
         var imgElement = document.querySelector('[img-id="' + idealId + '"]');
-        console.log('/api/selection/image/' + [[${selection.filePath}]] + '/' + response.idealName);
-        console.log(imgElement);
         imgElement.src = '/api/selection/image/' + [[${selection.filePath}]] + '/' + response.idealName + '?_t=' + new Date().getTime();
       },
       error: function(error) {
@@ -133,6 +140,21 @@
     }
   }
 
+  function deleteBtnOnClicked(event){
+    console.log(event);
+    var idealId = event.currentTarget.getAttribute("delete-btn-id");
+
+    $.ajax({
+      url: '/api/ideal/' + encodeURIComponent(idealId),
+      type: 'DELETE',
+      success: function(response) {
+        window.location.reload();
+      },
+      error: function(error) {
+        console.error('Ajax 요청 실패', error);
+      }
+    });
+  }
   function logout() {
     $.ajax({
       type: 'GET',

@@ -137,6 +137,8 @@
         WHERE selection.creator_id = #{creatorId}
     </select>
 
+
+
     <select id="findPageableByCreatorId" resultMap="IdealSelectionResultMap">
         SELECT selection.id          AS id,
                selection.title       AS title,

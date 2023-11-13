@@ -16,6 +16,7 @@
         where id =#{id}
     </update>
 
+
     <select id="findById" resultType="User">
         select id, user_id, password, user_name
         from user

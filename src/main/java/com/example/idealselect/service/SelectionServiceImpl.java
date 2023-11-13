@@ -14,6 +14,7 @@ import com.example.idealselect.session.SessionManager;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.xml.UtilNamespaceHandler;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
@@ -76,7 +77,7 @@ public class SelectionServiceImpl implements IdealSelectionService{
                 String name = file.getOriginalFilename();
                 Path imagePath = Paths.get(path.toString(), name);
                 file.transferTo(new File(imagePath.toString()));
-                Ideal ideal = Ideal.builder().idealName(name).winRate(0.0).winCount(0).selection(selection).build();
+                Ideal ideal = Ideal.builder().idealName(name).winRate(0.0).winCount(0).selectionId(selection.getId()).build();
                 idealList.add(ideal);
             }
         } catch (IOException e) {
@@ -94,7 +95,12 @@ public class SelectionServiceImpl implements IdealSelectionService{
 
     @Override
     public void delete(Long id, HttpServletRequest request) {
+        User user = sessionManager.getSession(request).orElseThrow(() -> new CustomException(ErrorCode.UNAUTHORIZED_USER));
+        IdealSelection selection = selectionMapper.findByIdAllResult(id).orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
+        if(!selection.getCreator().getId().equals(user.getId()))
+            throw new CustomException(ErrorCode.BAD_REQUEST);
 
+        selectionMapper.deleteById(id);
     }
 
     @Override

@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -47,5 +48,15 @@ public class IdealService {
             e.printStackTrace();
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    public void delete(Long id, HttpServletRequest request){
+        User user = sessionManager.getSession(request).orElseThrow(() -> new CustomException(ErrorCode.UNAUTHORIZED_USER));
+        Ideal ideal = idealMapper.findById(id).orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
+        IdealSelection selection = selectionMapper.findByIdAllResult(ideal.getSelectionId()).orElseThrow(() -> new CustomException(ErrorCode.INTERNAL_SERVER_ERROR));
+        if(!selection.getCreator().getId().equals(user.getId()))
+            throw new CustomException(ErrorCode.BAD_REQUEST);
+
+        idealMapper.deleteById(id);
     }
 }

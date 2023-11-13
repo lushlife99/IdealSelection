@@ -42,7 +42,7 @@
         INSERT INTO ideal (ideal_name, win_rate, selection_id, win_count)
         VALUES
         <foreach collection="list" item="ideal" separator=",">
-            (#{ideal.idealName}, #{ideal.winRate}, #{ideal.selection.id}, #{ideal.winCount})
+            (#{ideal.idealName}, #{ideal.winRate}, #{ideal.selectionId}, #{ideal.winCount})
         </foreach>
     </insert>
 

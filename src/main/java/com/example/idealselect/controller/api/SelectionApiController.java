@@ -75,4 +75,16 @@ public class SelectionApiController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @DeleteMapping("/ideal/{id}")
+    public ResponseEntity deleteIdeal(@PathVariable Long id, HttpServletRequest request){
+        idealService.delete(id, request);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/idealSelection/{id}")
+    public ResponseEntity deleteIdealSelection(@PathVariable Long id, HttpServletRequest request){
+        selectionService.delete(id, request);
+        return  new ResponseEntity(HttpStatus.OK);
+    }
+
 }
