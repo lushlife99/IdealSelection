@@ -46,14 +46,14 @@
   <tr th:each="ideal, index : ${selection.getIdealList()}">
     <td th:text="${index.count}"></td>
     <td>
-      <img th:src="'/api/selection/image/' + ${selection.filePath} + '/' + ${ideal.idealName}" alt="이미지" style="max-width: 120px; max-height: 200px;">
+      <img th:attr="img-id=${ideal.id}" th:src="'/api/selection/image/' + ${selection.filePath} + '/' + ${ideal.idealName}" alt="이미지" style="max-width: 120px; max-height: 200px;">
     </td>
     <td>
       <input type="text" th:attr="data-id=${ideal.id}" th:value="${ideal.idealName}" class="idealNameInput">
 
     </td>
     <td>
-      <input type="file" />
+      <input type="file" th:attr="data-id=${ideal.id}" class="file"/>
     </td>
     <td>
       <button th:attr="data-id=${ideal.id}" class="delete-btn">이상형 삭제</button>
@@ -68,18 +68,53 @@
 <script th:inline="javascript">
 
   var idealInputs = document.getElementsByClassName('idealNameInput');
-  console.log(idealInputs.length);
   for (var i = 0; i < idealInputs.length; i++) {
     idealInputs[i].addEventListener('keydown', function(event) {
-      handleKeyPress(event, event.target.getAttribute('data-id'));
+      handleKeyPress(event);
     });
   }
-  function handleKeyPress(event, idealId) {
+  var files = document.getElementsByClassName("file");
+  for (const file of files) {
+    file.addEventListener("change", function(event) {
+      handleFileChange(event);
+    })
+  }
+
+  function handleFileChange(event) {
+    console.log("asdfasdf");
+    var fileInput = event.target;
+    var file = fileInput.files[0];
+
+    var formData = new FormData();
+    formData.append('file', file);
+    formData.append('filePath', [[${selection.filePath}]]);
+    formData.append('idealId', event.target.getAttribute('data-id'));
+    formData.append('selectionId', [[${selection.id}]]);
+    $.ajax({
+      url: '/api/ideal/image',
+      type: 'PUT',
+      data: formData,
+      contentType: false,
+      processData: false,
+      success: function(response) {
+        var idealId = event.target.getAttribute('data-id');
+        var imgElement = document.querySelector('[img-id="' + idealId + '"]');
+        console.log('/api/selection/image/' + [[${selection.filePath}]] + '/' + response.idealName);
+        console.log(imgElement);
+        imgElement.src = '/api/selection/image/' + [[${selection.filePath}]] + '/' + response.idealName + '?_t=' + new Date().getTime();
+      },
+      error: function(error) {
+        console.error('File upload error', error);
+      }
+    });
+  }
+  function handleKeyPress(event) {
+    var idealId = event.target.getAttribute('data-id')
     console.log(event.target.value);
     if (event.key === 'Enter') {
 
       $.ajax({
-        url: '/api/ideal/' + encodeURIComponent([[${selection.filePath}]]), // 실제 엔드포인트로 변경
+        url: '/api/ideal/' + encodeURIComponent([[${selection.filePath}]]),
         type: 'PUT',
         headers: {
         'Content-Type': 'application/json',
@@ -101,7 +136,7 @@
   function logout() {
     $.ajax({
       type: 'GET',
-      url: '/api/logOut',  // 실제 로그인 엔드포인트로 변경
+      url: '/api/logOut',
       success: function (response) {
         alert("로그아웃");
         window.location.href = '/login';

@@ -2,9 +2,11 @@ package com.example.idealselect.controller.api;
 
 import com.example.idealselect.dto.IdealDto;
 import com.example.idealselect.dto.IdealSelectionDto;
+import com.example.idealselect.entity.Ideal;
 import com.example.idealselect.exception.CustomException;
 import com.example.idealselect.exception.ErrorCode;
 import com.example.idealselect.service.IdealSelectionService;
+import com.example.idealselect.service.IdealService;
 import com.example.idealselect.session.SessionManager;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.websocket.Session;
@@ -33,6 +35,7 @@ import java.util.Objects;
 public class SelectionApiController {
 
     private final IdealSelectionService selectionService;
+    private final IdealService idealService;
     private final SessionManager sessionManager;
 
     @PostMapping("/selection/create")
@@ -40,6 +43,19 @@ public class SelectionApiController {
                                                     @RequestParam String body,
                                                     @RequestParam List<MultipartFile> files, HttpServletRequest request){
         return new ResponseEntity<>(selectionService.create(title, body, files, request), HttpStatus.OK);
+    }
+
+    /**
+     *
+     * @return updated Image Url
+     */
+
+    @PutMapping("/ideal/image")
+    public ResponseEntity<IdealDto> updateImage(@RequestParam String filePath,
+                                                @RequestParam Long idealId,
+                                                @RequestParam Long selectionId,
+                                                @RequestParam MultipartFile file, HttpServletRequest request){
+        return new ResponseEntity<>(idealService.updateImage(filePath, idealId, selectionId, file, request), HttpStatus.OK);
     }
 
     @GetMapping(value = "/selection/image/{imageName}/{imageName2}", produces = MediaType.IMAGE_JPEG_VALUE)

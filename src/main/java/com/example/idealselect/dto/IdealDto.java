@@ -23,6 +23,6 @@ public class IdealDto {
         this.idealName = ideal.getIdealName();
         this.winCount = ideal.getWinCount();
         this.winRate = ideal.getWinRate();
-        this.selectionId = ideal.getSelection().getId();
+
     }
 }
