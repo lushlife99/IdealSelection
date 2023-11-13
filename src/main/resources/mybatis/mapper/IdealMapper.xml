@@ -11,10 +11,12 @@
 
     <update id="update">
         update ideal
-        set ideal_name = #{idealName},
-            win_rate = #{winRate},
-            win_count = #{winCount}
-        where id =#{id}
+        <set>
+            <if test="ideal.idealName != null">ideal_name = #{ideal.idealName},</if>
+            <if test="ideal.winRate != null">win_rate = #{ideal.winRate},</if>
+            <if test="ideal.winCount != null">win_count = #{ideal.winCount},</if>
+        </set>
+        where id = #{id}
     </update>
 
     <select id="findById" resultType="Ideal">

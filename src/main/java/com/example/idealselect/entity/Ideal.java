@@ -23,4 +23,5 @@ public class Ideal {
         this.winRate = idealDto.getWinRate();
         this.winCount = idealDto.getWinCount();
     }
+
 }

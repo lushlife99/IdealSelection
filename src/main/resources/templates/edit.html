@@ -49,8 +49,8 @@
       <img th:src="'/api/selection/image/' + ${selection.filePath} + '/' + ${ideal.idealName}" alt="이미지" style="max-width: 120px; max-height: 200px;">
     </td>
     <td>
-      <input type="text" th:value="${ideal.idealName}" id="idealNameInput"
-             onkeypress="handleKeyPress(event, ${ideal.id})">
+      <input type="text" th:attr="data-id=${ideal.id}" th:value="${ideal.idealName}" class="idealNameInput">
+
     </td>
     <td>
       <input type="file" />
@@ -67,24 +67,31 @@
 
 <script th:inline="javascript">
 
+  var idealInputs = document.getElementsByClassName('idealNameInput');
+  console.log(idealInputs.length);
+  for (var i = 0; i < idealInputs.length; i++) {
+    idealInputs[i].addEventListener('keydown', function(event) {
+      handleKeyPress(event, event.target.getAttribute('data-id'));
+    });
+  }
   function handleKeyPress(event, idealId) {
+    console.log(event.target.value);
     if (event.key === 'Enter') {
-      var inputValue = document.getElementById('idealNameInput').value;
 
-      // 여기서 Ajax 요청을 보내도록 수정
       $.ajax({
-        url: '/your-ajax-endpoint', // 실제 엔드포인트로 변경
-        type: 'POST', // 또는 'GET' 등
-        data: {
-          idealId: idealId,
-          newValue: inputValue
+        url: '/api/ideal/' + encodeURIComponent([[${selection.filePath}]]), // 실제 엔드포인트로 변경
+        type: 'PUT',
+        headers: {
+        'Content-Type': 'application/json',
         },
+        data: JSON.stringify({
+          id: idealId,
+          idealName: event.target.value,
+        }),
         success: function(response) {
-          // 성공 시 처리
           console.log('Ajax 요청 성공', response);
         },
         error: function(error) {
-          // 실패 시 처리
           console.error('Ajax 요청 실패', error);
         }
       });

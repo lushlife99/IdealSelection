@@ -53,8 +53,8 @@ public class SelectionApiController {
         }
     }
 
-    @PutMapping("/ideal/")
-    public ResponseEntity editIdealName(@RequestParam String filePath, @RequestBody IdealDto idealDto, HttpServletRequest request){
+    @PutMapping("/ideal/{filePath}")
+    public ResponseEntity editIdealName(@PathVariable String filePath, @RequestBody IdealDto idealDto, HttpServletRequest request){
         selectionService.editIdealName(filePath, idealDto, request);
         return new ResponseEntity<>(HttpStatus.OK);
     }
