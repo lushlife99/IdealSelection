@@ -1,5 +1,6 @@
 package com.example.idealselect.controller.api;
 
+import com.example.idealselect.dto.IdealDto;
 import com.example.idealselect.dto.IdealSelectionDto;
 import com.example.idealselect.exception.CustomException;
 import com.example.idealselect.exception.ErrorCode;
@@ -24,31 +25,24 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/selection")
+@RequestMapping("/api")
 public class SelectionApiController {
 
     private final IdealSelectionService selectionService;
     private final SessionManager sessionManager;
 
-    @PostMapping("/create")
+    @PostMapping("/selection/create")
     public ResponseEntity<IdealSelectionDto> create(@RequestParam String title,
                                                     @RequestParam String body,
                                                     @RequestParam List<MultipartFile> files, HttpServletRequest request){
         return new ResponseEntity<>(selectionService.create(title, body, files, request), HttpStatus.OK);
     }
 
-//    @GetMapping("/myList")
-//    public ResponseEntity<IdealSelectionDto> getSelectionSubList(@RequestParam(defaultValue = "0") Integer pagePrefix, HttpServletRequest request){
-//        if (sessionManager.getSession(request).isEmpty())
-//            throw new CustomException(ErrorCode.UNAUTHORIZED_USER);
-//
-//        model.addAttribute("selectionList", selectionService.getCreationList(pagePrefix, request));
-//    }
-
-    @GetMapping(value = "/image/{imageName}/{imageName2}", produces = MediaType.IMAGE_JPEG_VALUE)
+    @GetMapping(value = "/selection/image/{imageName}/{imageName2}", produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<byte[]> getIdealImg(@PathVariable String imageName, @PathVariable String imageName2) {
 
         try {
@@ -58,4 +52,11 @@ public class SelectionApiController {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
     }
+
+    @PutMapping("/ideal/")
+    public ResponseEntity editIdealName(@RequestParam String filePath, @RequestBody IdealDto idealDto, HttpServletRequest request){
+        selectionService.editIdealName(filePath, idealDto, request);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }

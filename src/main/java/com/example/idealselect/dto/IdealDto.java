@@ -16,13 +16,13 @@ public class IdealDto {
     private String idealName;
     private Double winRate;
     private Integer winCount;
-    private IdealSelection selection;
+    private Long selectionId;
 
     public IdealDto(Ideal ideal){
         this.id = ideal.getId();
         this.idealName = ideal.getIdealName();
         this.winCount = ideal.getWinCount();
         this.winRate = ideal.getWinRate();
-        this.selection = ideal.getSelection();
+        this.selectionId = ideal.getSelection().getId();
     }
 }

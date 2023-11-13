@@ -1,6 +1,5 @@
 package com.example.idealselect.service;
 
-import com.example.idealselect.dto.UserDto;
 import com.example.idealselect.entity.User;
 import com.example.idealselect.exception.CustomException;
 import com.example.idealselect.exception.ErrorCode;
@@ -13,8 +12,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-@Service
 @RequiredArgsConstructor
+@Service
 public class UserServiceImpl implements UserService {
 
     private final UserMapper userMapper;

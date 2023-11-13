@@ -104,12 +104,11 @@
 
 
 
-<div id="content" class="row equal">
+<div id="content" class="row equal mt-5">
     <!-- Content will be dynamically updated here -->
 </div>
 
-<ul class="pagination mt-5" id="pagination" th:with="num=(${selectionList == null ? 0 : (selectionList.size() % 10 == 0 ? selectionList.size() / 10 : selectionList.size() / 10 + 1)})">
-
+<ul class="pagination mt-5 d-flex justify-content-center" id="pagination" th:with="num=(${selectionList == null ? 0 : (selectionList.size() % 10 == 0 ? selectionList.size() / 10 : selectionList.size() / 10 + 1)})">
     <li th:if="${pagePrefix != 0}">
         <a href="#" onclick="changePage('prev')">이전</a>
     </li>
@@ -154,12 +153,12 @@
 
             if (i % 5 === 0) {
                 rowDiv = document.createElement('div');
-                rowDiv.className = 'row equal';
+                rowDiv.className = 'row equal mb-5';
             }
 
             // Create HTML elements dynamically
             var colDiv = document.createElement('div');
-            colDiv.className = 'col-xs-6 col-sm-3 col-lg-2';
+            colDiv.className = 'col-xs-6 col-sm-3 col-lg-2 mx-auto';
 
             var iboxContentDiv = document.createElement('div');
             iboxContentDiv.className = 'ibox-content product-box';
@@ -205,7 +204,7 @@
 
             // Edit and delete buttons
             var btnGroupDiv = document.createElement('div');
-            btnGroupDiv.className = 'btn-group';
+            btnGroupDiv.className = 'btn-group mt-3';
             btnGroupDiv.setAttribute('data-id', selection.id);
 
 

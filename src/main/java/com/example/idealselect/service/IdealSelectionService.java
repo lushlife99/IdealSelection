@@ -1,5 +1,6 @@
 package com.example.idealselect.service;
 
+import com.example.idealselect.dto.IdealDto;
 import com.example.idealselect.dto.IdealSelectionDto;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,4 +22,7 @@ public interface IdealSelectionService {
     void updateSubCount(Long idealSelectionId, HttpServletRequest request);
     List<IdealSelectionDto> getCreationList(int page, HttpServletRequest request);
     byte[] getIdealImg(String imageName, String imageName2) throws IOException;
+
+    IdealSelectionDto getSelection(Long selectionId, HttpServletRequest request);
+    void editIdealName(String filePath, IdealDto idealDto, HttpServletRequest request);
 }

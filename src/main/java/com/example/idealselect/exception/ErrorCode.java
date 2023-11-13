@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum ErrorCode {
     /* 400 BAD_REQUEST : 잘못된 요청 */
+    BAD_REQUEST(HttpStatus.BAD_REQUEST, "Bad Request"),
 
     /* 401 UNAUTHORIZED : 인증되지 않은 사용자 */
     INVALID_USERID(HttpStatus.UNAUTHORIZED, "존재하지 않는 USERID 입니다."),
@@ -19,8 +20,10 @@ public enum ErrorCode {
     /* 404 NOT_FOUND : Resource 를 찾을 수 없음 */
     FILE_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 이미지입니다."),
 
+
     /* 409 CONFLICT : Resource 의 현재 상태와 충돌. 보통 중복된 데이터 존재 */
     ALREADY_EXIST_USERID(HttpStatus.CONFLICT, "이미 가입된 USERID 입니다."),
+    DUPLICATED_NAME_EXIST(HttpStatus.CONFLICT, "중복되는 이상형 이름이 존재합니다."),
     /* 500 */
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "server error"),
     ;

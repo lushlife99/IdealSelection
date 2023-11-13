@@ -1,6 +1,5 @@
 package com.example.idealselect.controller;
 
-import com.example.idealselect.dto.IdealSelectionDto;
 import com.example.idealselect.service.IdealSelectionService;
 import com.example.idealselect.session.SessionManager;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,7 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -53,5 +51,14 @@ public class SelectionController {
             return "redirect:/login";
 
         return "create";
+    }
+
+    @GetMapping("/edit")
+    public String editPage(@RequestParam Long selectionId, Model model, HttpServletRequest request){
+        if (sessionManager.getSession(request).isEmpty())
+            return "redirect:/login";
+
+        model.addAttribute("selection", selectionService.getSelection(selectionId, request));
+        return "edit";
     }
 }

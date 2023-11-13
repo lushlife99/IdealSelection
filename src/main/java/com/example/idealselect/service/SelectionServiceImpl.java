@@ -1,5 +1,6 @@
 package com.example.idealselect.service;
 
+import com.example.idealselect.dto.IdealDto;
 import com.example.idealselect.dto.IdealSelectionDto;
 import com.example.idealselect.entity.Ideal;
 import com.example.idealselect.entity.IdealSelection;
@@ -139,5 +140,34 @@ public class SelectionServiceImpl implements IdealSelectionService{
             throw new CustomException(ErrorCode.FILE_NOT_FOUND);
         }
 
+    }
+
+    @Override
+    public IdealSelectionDto getSelection(Long selectionId, HttpServletRequest request){
+        User user = sessionManager.getSession(request).get();
+
+        IdealSelection selection = selectionMapper.findByIdAllResult(selectionId)
+                .orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
+        if(!selection.getCreator().getId().equals(user.getId()))
+            throw new CustomException(ErrorCode.BAD_REQUEST);
+
+        return new IdealSelectionDto(selection);
+    }
+
+    @Override
+    public void editIdealName(String filePath, IdealDto idealDto, HttpServletRequest request){
+
+        Ideal ideal = idealMapper.findById(idealDto.getId()).orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
+        Path imagePath = Paths.get(rootFilePath, filePath, ideal.getIdealName());
+        File file = imagePath.toFile();
+
+        Path newFilePath = Paths.get(rootFilePath, filePath, idealDto.getIdealName());
+        File newFile = newFilePath.toFile();
+
+        if (file.renameTo(newFile)) {
+            idealMapper.update(idealDto.getId(), new Ideal(idealDto));
+        } else {
+            throw new CustomException(ErrorCode.DUPLICATED_NAME_EXIST);
+        }
     }
 }

@@ -81,11 +81,11 @@
     </div>
 </nav>
 
-<div id="content" class="row equal">
+<div id="content" class="row equal mt-5">
     <!-- Content will be dynamically updated here -->
 </div>
 
-<ul class="pagination mt-5" id="pagination" th:with="num=(${selectionList == null ? 0 : (selectionList.size() % 10 == 0 ? selectionList.size() / 10 : selectionList.size() / 10 + 1)})">
+<ul class="pagination mt-5 d-flex justify-content-center" id="pagination" th:with="num=(${selectionList == null ? 0 : (selectionList.size() % 10 == 0 ? selectionList.size() / 10 : selectionList.size() / 10 + 1)})">
     <li th:if="${pagePrefix != 0}">
         <a href="#" onclick="changePage('prev')">이전</a>
     </li>
@@ -130,12 +130,12 @@
 
             if (i % 5 === 0) {
                 rowDiv = document.createElement('div');
-                rowDiv.className = 'row equal';
+                rowDiv.className = 'row equal mb-5';
             }
 
             // Create HTML elements dynamically
             var colDiv = document.createElement('div');
-            colDiv.className = 'col-xs-6 col-sm-3 col-lg-2';
+            colDiv.className = 'col-xs-6 col-sm-3 col-lg-2 mx-auto';
 
             var iboxContentDiv = document.createElement('div');
             iboxContentDiv.className = 'ibox-content product-box';
@@ -181,17 +181,17 @@
 
             // Edit and delete buttons
             var btnGroupDiv = document.createElement('div');
-            btnGroupDiv.className = 'btn-group';
+            btnGroupDiv.className = 'btn-group mt-3';
             btnGroupDiv.setAttribute('data-id', selection.id);
 
             var editButton = document.createElement('button');
             editButton.type = 'button';
-            editButton.className = 'btn btn-sm btn-outline btn-info fedit';
+            editButton.className = 'btn btn-sm btn-info';
             editButton.innerHTML = '<i class="fa fa-edit"></i> 수정';
 
             var deleteButton = document.createElement('button');
             deleteButton.type = 'button';
-            deleteButton.className = 'btn btn-sm btn-outline btn-primary fdelete';
+            deleteButton.className = 'btn btn-sm btn-primary';
             deleteButton.innerHTML = '<i class="fa fa-trash"></i> 삭제';
 
             btnGroupDiv.appendChild(editButton);
@@ -208,6 +208,16 @@
 
             rowDiv.appendChild(colDiv);
             contentDiv.appendChild(rowDiv);
+
+            editButton.addEventListener('click', function(event) {
+                var selectedId = event.currentTarget.parentElement.getAttribute('data-id');
+                handleEditClick(selectedId);
+            });
+
+            deleteButton.addEventListener('click', function(event) {
+                var selectedId = event.currentTarget.parentElement.getAttribute('data-id');
+                handleDeleteClick(selectedId);
+            });
         }
     }
 
@@ -261,6 +271,36 @@
     function search() {
         alert("검색 기능 구현");
     }
+
+    function handleEditClick(selectionId) {
+        var url = '/edit?' +
+            'selectionId=' + selectionId;
+
+
+        console.log(url);
+        window.location.href = encodeURI(url);
+    }
+
+    // Function to handle the delete button click
+    function handleDeleteClick(selectionId) {
+        // Add your AJAX code for delete here
+        // Example AJAX request using jQuery
+        $.ajax({
+            url: 'your_delete_endpoint', // Replace with your actual delete endpoint
+            type: 'POST', // or 'GET' depending on your server
+            data: { /* your data */ },
+            success: function(response) {
+                // Handle success
+                console.log('Delete successful', response);
+            },
+            error: function(error) {
+                // Handle error
+                console.error('Delete error', error);
+            }
+        });
+    }
+
+
 
     changePage(1);
 </script>
