@@ -81,6 +81,7 @@
 
     </div>
 </nav>
+
 <div class="container-fluid d-flex">
     <form class="d-flex">
         <div class="col-xl-3">
@@ -175,11 +176,8 @@
             productImitationDiv.style = 'height: 200px; padding: 0px;';
 
             var img1Div = document.createElement('div');
-            console.log("aa");
             if (selection.img1) {
                 var imagePath = '/api/selection/image/' + selection.filePath + '/' + encodeURIComponent(selection.img1.trim());
-                console.log("bb");
-                console.log(imagePath.toString());
                 img1Div.style = 'float: left; width: 50%; height: 180px; background-image: url(' + imagePath + '); background-repeat: no-repeat; background-size: cover; background-position: center top; display: flex;';
             } else {
                 console.log("cc");
@@ -256,7 +254,7 @@
 
     function handleStartClick(event) {
         var selectedId = event.currentTarget.parentElement.getAttribute('data-id');
-        window.open('http://localhost:8080/play?selectionId=' + selectedId, 'play');
+        window.open('http://localhost:8080/play?selectionId=' + selectedId, '_blank');
     }
 
     function handleRankingClick(event) {
@@ -298,9 +296,6 @@
         });
     }
 
-    function changeSelection() {
-        // Implement if needed
-    }
 
     function sortByPopularity() {
         alert("인기순으로 정렬합니다.");
