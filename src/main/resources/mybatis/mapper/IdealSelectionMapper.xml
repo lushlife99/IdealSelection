@@ -20,8 +20,9 @@
         <collection property="idealList" ofType="Ideal">
             <id property="id" column="idealList_id"/>
             <result property="idealName" column="idealList_idealName"/>
-            <result property="winRate" column="idealList_winRate"/>
             <result property="winCount" column="idealList_winCount"/>
+            <result property="finalWinCount" column="idealList_finalWinCount"/>
+            <result property="battleCount" column="idealList_battleCount"/>
         </collection>
         <collection property="replyList" ofType="Reply">
             <id property="id" column="reply_id"/>
@@ -79,8 +80,9 @@
             selection.update_time AS updateTime,
             ideal.id AS idealList_id,
             ideal.ideal_name AS idealList_idealName,
-            ideal.win_rate AS idealList_winRate,
             ideal.win_count AS idealList_winCount,
+            ideal.final_win_count AS idealList_finalWinCount,
+            ideal.battle_count AS idealList_battleCount,
             reply.id AS replyList_id,
             reply.comment AS replyList_comment,
             reply.author_id AS replyList_authorId,
@@ -119,7 +121,8 @@
             selection.update_time AS updateTime,
             ideal.id AS idealList_id,
             ideal.ideal_name AS idealList_idealName,
-            ideal.win_rate AS idealList_winRate,
+            ideal.final_win_count AS idealList_finalWinCount,
+            ideal.battle_count AS idealList_battleCount,
             ideal.win_count AS idealList_winCount,
             reply.id AS replyList_id,
             reply.comment AS replyList_comment,
@@ -149,7 +152,8 @@
                selection.update_time AS updateTime,
                ideal.id              AS idealList_id,
                ideal.ideal_name      AS idealList_idealName,
-               ideal.win_rate        AS idealList_winRate,
+               ideal.final_win_count AS idealList_finalWinCount,
+               ideal.battle_count AS idealList_battleCount,
                ideal.win_count       AS idealList_winCount,
                user.id               AS creator_id,
                user.user_id          AS creator_userId,
@@ -177,7 +181,8 @@
         selection.update_time AS updateTime,
         ideal.id              AS idealList_id,
         ideal.ideal_name      AS idealList_idealName,
-        ideal.win_rate        AS idealList_winRate,
+        ideal.final_win_count AS idealList_finalWinCount,
+        ideal.battle_count AS idealList_battleCount,
         ideal.win_count       AS idealList_winCount,
         user.id               AS creator_id,
         user.user_id          AS creator_userId,

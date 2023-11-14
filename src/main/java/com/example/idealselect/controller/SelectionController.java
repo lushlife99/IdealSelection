@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
@@ -38,10 +39,11 @@ public class SelectionController {
     }
 
     @GetMapping("/play")
-    public String playPage(Model model, HttpServletRequest request){
+    public String playPage(@RequestParam Long selectionId, Model model, HttpServletRequest request){
         if (sessionManager.getSession(request).isEmpty())
             return "redirect:/login";
 
+        model.addAttribute("selection", selectionService.getSelection(selectionId));
         return "play";
     }
 

@@ -5,22 +5,24 @@
 <mapper namespace="com.example.idealselect.repository.IdealMapper">
 
     <insert id="save" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
-        insert into ideal (ideal_name, win_rate, selection_id, win_count)
-        values (#{idealName}, #{winRate}, #{selection.id}, #{winCount})
+        insert into ideal (ideal_name, final_win_count, selection_id, win_count, battle_count)
+        values (#{idealName}, #{finalWinCount}, #{selectionId}, #{winCount}, #{battleCount})
     </insert>
 
     <update id="update">
         update ideal
         <set>
             <if test="ideal.idealName != null">ideal_name = #{ideal.idealName},</if>
-            <if test="ideal.winRate != null">win_rate = #{ideal.winRate},</if>
             <if test="ideal.winCount != null">win_count = #{ideal.winCount},</if>
+            <if test="ideal.battleCount != null">battle_count = #{ideal.battleCount},</if>
+            <if test="ideal.finalWinCount != null">final_win_count = #{ideal.finalWinCount},</if>
+
         </set>
         where id = #{id}
     </update>
 
     <select id="findById" resultType="Ideal">
-        select id, ideal_name, win_rate, selection_id, win_count
+        select id, ideal_name, final_win_count, selection_id, win_count, battle_count
         from ideal
         where id = #{id}
     </select>
@@ -33,16 +35,16 @@
 
 
     <select id="findAllBySelectionId" resultType="Ideal">
-        select id, ideal_name, win_rate, selection_id, win_count
+        select id, ideal_name, final_win_count, selection_id, win_count, battle_count
         from ideal
         where selection_id = #{selectionId}
     </select>
 
     <insert id="saveAll" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="java.util.List">
-        INSERT INTO ideal (ideal_name, win_rate, selection_id, win_count)
+        INSERT INTO ideal (ideal_name, final_win_count, selection_id, win_count, battle_count)
         VALUES
         <foreach collection="list" item="ideal" separator=",">
-            (#{ideal.idealName}, #{ideal.winRate}, #{ideal.selectionId}, #{ideal.winCount})
+            (#{ideal.idealName}, #{ideal.finalWinCount}, #{ideal.selectionId}, #{ideal.winCount}, #{ideal.battleCount})
         </foreach>
     </insert>
 

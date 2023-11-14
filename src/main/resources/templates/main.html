@@ -232,9 +232,26 @@
 
             rowDiv.appendChild(colDiv);
             contentDiv.appendChild(rowDiv);
+
+            startButton.addEventListener('click', function(event) {
+                handleStartClick(event);
+            });
+
+            rankingButton.addEventListener('click', function(event) {
+                handleRankingClick(event);
+            });
         }
     }
 
+    function handleStartClick(event) {
+        var selectedId = event.currentTarget.parentElement.getAttribute('data-id');
+        window.open('http://localhost:8080/play?selectionId=' + selectedId, 'play');
+    }
+
+    function handleRankingClick(event) {
+        var selectedId = event.currentTarget.parentElement.getAttribute('data-id');
+
+    }
 
     function getNextPaginationList() {
         console.log("next");

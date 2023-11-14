@@ -14,14 +14,18 @@ public class Ideal {
 
     private Long id;
     private String idealName;
-    private Double winRate;
+    private String finalWinCount;
     private Integer winCount;
+    private Integer battleCount;
     private Long selectionId;
 
     public Ideal(IdealDto idealDto){
         this.idealName = idealDto.getIdealName();
-        this.winRate = idealDto.getWinRate();
+        this.selectionId = idealDto.getSelectionId();
+        this.finalWinCount = idealDto.getFinalWinCount();
         this.winCount = idealDto.getWinCount();
+        this.battleCount = idealDto.getBattleCount();
+
     }
 
 }

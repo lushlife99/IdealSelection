@@ -24,5 +24,6 @@ public interface IdealSelectionService {
     byte[] getIdealImg(String imageName, String imageName2) throws IOException;
 
     IdealSelectionDto getSelection(Long selectionId, HttpServletRequest request);
+    IdealSelectionDto getSelection(Long selectionId);
     void editIdealName(String filePath, IdealDto idealDto, HttpServletRequest request);
 }

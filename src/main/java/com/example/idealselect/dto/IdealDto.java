@@ -14,15 +14,17 @@ import lombok.NoArgsConstructor;
 public class IdealDto {
     private Long id;
     private String idealName;
-    private Double winRate;
+    private String finalWinCount;
     private Integer winCount;
+    private Integer battleCount;
     private Long selectionId;
 
     public IdealDto(Ideal ideal){
         this.id = ideal.getId();
         this.idealName = ideal.getIdealName();
         this.winCount = ideal.getWinCount();
-        this.winRate = ideal.getWinRate();
-
+        this.finalWinCount = ideal.getFinalWinCount();
+        this.battleCount = ideal.getBattleCount();
+        this.selectionId = ideal.getSelectionId();
     }
 }

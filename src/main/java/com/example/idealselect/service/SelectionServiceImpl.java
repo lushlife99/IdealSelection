@@ -77,7 +77,7 @@ public class SelectionServiceImpl implements IdealSelectionService{
                 String name = file.getOriginalFilename();
                 Path imagePath = Paths.get(path.toString(), name);
                 file.transferTo(new File(imagePath.toString()));
-                Ideal ideal = Ideal.builder().idealName(name).winRate(0.0).winCount(0).selectionId(selection.getId()).build();
+                Ideal ideal = Ideal.builder().idealName(name).winCount(0).selectionId(selection.getId()).build();
                 idealList.add(ideal);
             }
         } catch (IOException e) {
@@ -157,6 +157,11 @@ public class SelectionServiceImpl implements IdealSelectionService{
         if(!selection.getCreator().getId().equals(user.getId()))
             throw new CustomException(ErrorCode.BAD_REQUEST);
 
+        return new IdealSelectionDto(selection);
+    }
+    @Override
+    public IdealSelectionDto getSelection(Long selectionId){
+        IdealSelection selection = selectionMapper.findByIdAllResult(selectionId).orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
         return new IdealSelectionDto(selection);
     }
 
