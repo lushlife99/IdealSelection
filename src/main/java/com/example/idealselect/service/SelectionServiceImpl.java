@@ -31,10 +31,7 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -191,15 +188,18 @@ public class SelectionServiceImpl implements IdealSelectionService{
         IdealSelection selection = selectionMapper.findByIdAllResult(selectionId).orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
         List<Ideal> idealList = selection.getIdealList();
         List<Ideal> randomIdealList = new ArrayList<>();
-
         Random random = new Random();
+        Set<Integer> uniqueRandomNumbers = new HashSet<>();
 
-        for(int i = 0; i < round; i++){
-            int randomIndex = random.nextInt(round);
-            randomIdealList.add(idealList.get(randomIndex));
+        while (uniqueRandomNumbers.size() < round) {
+            uniqueRandomNumbers.add(random.nextInt(round));
         }
-        selection.setIdealList(randomIdealList);
 
+        for (Integer uniqueRandomNumber : uniqueRandomNumbers) {
+            randomIdealList.add(idealList.get(uniqueRandomNumber));
+        }
+
+        selection.setIdealList(randomIdealList);
         return new IdealSelectionDto(selection);
     }
 }

@@ -12,6 +12,25 @@
             position: relative;
             display: inline-block;
         }
+        .main-container {
+            background-color: black;
+            width: 100vh;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .match {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+        .match img {
+            width: 70vh;
+            height: 80vh;
+        }
+
     </style>
 </head>
 <body>
@@ -61,8 +80,9 @@
     </div>
 </div>
 
-
-
+<main class="main-container" style="background-color: black; width: 100vw; height: 100vh; display: flex; justify-content: center; align-items: center;">
+    <!-- 내용 추가 -->
+</main>
 
 </body>
 </html>
@@ -71,9 +91,52 @@
     const encodedURL = '/api/selection/image/' + [[${selection.filePath}]] + '/' + encodeURIComponent([[${selection.img1}]]);
     const imgElement = document.getElementById('imageElement');
     imgElement.src = encodedURL;
-
+    var totalRound = null;
+    var currentRound = 1;
     let playingSelection = null;
 
+    function createCustomElements() {
+        var container = document.querySelector('.container');
+        container.innerHTML = '';
+        container = document.querySelector('.main-container');
+        container.style.backgroundColor = 'black';
+        var newDiv = document.createElement('div');
+        newDiv.className = 'main-container'; // 클래스 추가
+        var h1Text = [[${selection.title}]] + " 총 " + totalRound + "강 " + currentRound + "/" + totalRound/2;
+        const imageUrl1 = `/api/selection/image/${playingSelection.filePath}/${playingSelection.idealList[0].idealName}`;
+        const imageUrl2 = `/api/selection/image/${playingSelection.filePath}/${playingSelection.idealList[1].idealName}`;
+
+        var innerHTML =
+            `
+           <div class="ideal-cup" style="display: flex; justify-content: center; align-items: center; height: 100vh; padding: 0px">
+                <div>
+                    <h1 style="text-align: center; font-size: 5em; color: white; margin-top: 0px;">${h1Text}</h1>
+                    <div class="match">
+                        <div class="image-with-description" style="display: flex; justify-content: center; align-items: center;">
+                        <div class="image" style="background-image: url('${imageUrl1}'); width: 70vh; height: 80vh; background-size: cover; font-family: Arial, sans-serif; color: black;">
+                            <p class="image-description" style="font-size: 1.5em; text-align: center;">${playingSelection.idealList[0].idealName}</p>
+                        </div>
+                    <div class="image" style="background-image: url('${imageUrl2}'); width: 70vh; height: 80vh; background-size: cover; font-family: Arial, sans-serif; color: black;">
+                <p class="image-description" style="font-size: 1.5em; text-align: center;">${playingSelection.idealList[1].idealName}</p>
+                </div>
+            </div>
+        </div>
+        <!-- 추가적인 매치들을 여기에 추가할 수 있습니다. -->
+    </div>
+</div>`;
+
+        newDiv.innerHTML = innerHTML;
+
+        // 요소 추가
+        container.appendChild(newDiv);
+
+        var imageElement = document.querySelector('.image');
+        imageElement.addEventListener('click', function() {
+            console.log("asdf");
+        });
+
+        //img2도 추가해야함.
+    }
     function config() {
 
         var number = [[${selection.idealList.size}]];
@@ -97,19 +160,20 @@
             listItem.appendChild(link);
             listItem.addEventListener('click', function (event) {
                     event.preventDefault();
-                    var selectedRound = event.target.innerText.slice(0,-1);
+                    totalRound = event.target.innerText.slice(0,-1);
                     $.ajax({
                         type: 'POST',
                         url: 'http://localhost:8080/api/play',
                         data : {
                           selectionId : [[${selection.id}]],
-                          round : selectedRound
+                          round : totalRound
                         },
                         success: function (response) {
                             var container = document.querySelector('.container');
                             container.innerHTML = '';
                             console.log(response);
                             playingSelection = response;
+                            createCustomElements();
                         },
                         error: function (xhr, status, error) {
                             console.error('AJAX 요청 실패:', status, error);
@@ -118,8 +182,6 @@
             });
             dropdownList.appendChild(listItem);
         }
-
-
     }
     config();
 
