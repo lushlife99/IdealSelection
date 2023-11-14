@@ -49,7 +49,8 @@ public class SelectionServiceImpl implements IdealSelectionService{
         List<IdealSelection> selectionList = selectionMapper.findAllBySearchCond(new SelectionSearchCond("", "POPULARITY"), 10 * pageNum);
         List<IdealSelectionDto> dtoList = new ArrayList<>();
         for (IdealSelection selection : selectionList) {
-            dtoList.add(new IdealSelectionDto(selection));
+            IdealSelectionDto idealSelectionDto = new IdealSelectionDto(selection);
+            dtoList.add(idealSelectionDto);
         }
 
         return dtoList;
@@ -77,7 +78,7 @@ public class SelectionServiceImpl implements IdealSelectionService{
                 String name = file.getOriginalFilename();
                 Path imagePath = Paths.get(path.toString(), name);
                 file.transferTo(new File(imagePath.toString()));
-                Ideal ideal = Ideal.builder().idealName(name).winCount(0).selectionId(selection.getId()).build();
+                Ideal ideal = Ideal.builder().idealName(name).winCount(0).finalWinCount(0).battleCount(0).selectionId(selection.getId()).build();
                 idealList.add(ideal);
             }
         } catch (IOException e) {

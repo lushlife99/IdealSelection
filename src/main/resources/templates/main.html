@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>mainPage</title>
@@ -125,6 +125,12 @@
     var currentPage = 1;
     var itemsPerPage = 10;
 
+    for (const selectionListElement of selectionList) {
+        if(selectionListElement.id === 553){
+            console.log(selectionListElement);
+        }
+    }
+
     function changePage(page) {
         if (page === 'prev') {
             getPrevPaginationList();
@@ -139,6 +145,7 @@
         //updatePagination();
         updateContent();
     }
+    console.log(1);
 
     function updateContent() {
         var startIdx = (currentPage - 1) * itemsPerPage;
@@ -167,21 +174,25 @@
             productImitationDiv.className = 'product-imitation';
             productImitationDiv.style = 'height: 200px; padding: 0px;';
 
-            // Background images
             var img1Div = document.createElement('div');
+            console.log("aa");
             if (selection.img1) {
-                img1Div.style = 'float: left; width: 50%; height: 180px; background-image: url(/api/selection/image/' + selection.img1 + '); background-repeat: no-repeat; background-size: cover; background-position: center top; display: flex;';
+                var imagePath = '/api/selection/image/' + selection.filePath + '/' + encodeURIComponent(selection.img1.trim());
+                console.log("bb");
+                console.log(imagePath.toString());
+                img1Div.style = 'float: left; width: 50%; height: 180px; background-image: url(' + imagePath + '); background-repeat: no-repeat; background-size: cover; background-position: center top; display: flex;';
             } else {
-                // 이미지가 없을 경우에 대한 처리
-                img1Div.style = 'float: left; width: 50%; height: 180px; background-color: #ccc;'; // 또는 다른 기본 스타일을 지정
+                console.log("cc");
+                img1Div.style = 'float: left; width: 50%; height: 180px; background-color: #ccc;';
             }
 
             var img2Div = document.createElement('div');
             if (selection.img2) {
-                img2Div.style = 'float: left; width: 50%; height: 180px; background-image: url(/api/selection/image/' + selection.img2 + '); background-repeat: no-repeat; background-size: cover; background-position: center top; display: flex;';
+                var imagePath = '/api/selection/image/' + selection.filePath + '/' + encodeURIComponent(selection.img2.trim());
+                console.log(imagePath);
+                img2Div.style = 'float: left; width: 50%; height: 180px; background-image: url(' + imagePath + '); background-repeat: no-repeat; background-size: cover; background-position: center top; display: flex;';
             } else {
-                // 이미지가 없을 경우에 대한 처리
-                img2Div.style = 'float: left; width: 50%; height: 180px; background-color: #ccc;'; // 또는 다른 기본 스타일을 지정
+                img2Div.style = 'float: left; width: 50%; height: 180px; background-color: #ccc;';
             }
 
             productImitationDiv.appendChild(img1Div);

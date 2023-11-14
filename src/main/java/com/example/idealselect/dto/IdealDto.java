@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class IdealDto {
     private Long id;
     private String idealName;
-    private String finalWinCount;
+    private Integer finalWinCount;
     private Integer winCount;
     private Integer battleCount;
     private Long selectionId;

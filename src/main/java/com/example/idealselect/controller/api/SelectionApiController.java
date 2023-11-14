@@ -11,6 +11,7 @@ import com.example.idealselect.session.SessionManager;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.websocket.Session;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
@@ -29,6 +30,7 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
@@ -61,6 +63,7 @@ public class SelectionApiController {
     @GetMapping(value = "/selection/image/{imageName}/{imageName2}", produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<byte[]> getIdealImg(@PathVariable String imageName, @PathVariable String imageName2) {
 
+        log.info("imageName2={}", imageName2);
         try {
             byte[] img = selectionService.getIdealImg(imageName, imageName2);
             return new ResponseEntity<>(img, HttpStatus.OK);

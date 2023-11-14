@@ -42,8 +42,8 @@ public class IdealSelectionDto {
         this.creator = selection.getCreator();
         this.updateTime = selection.getUpdateTime();
         if(idealList.size() > 1) {
-            this.img1 = selection.getFilePath() + "/" + selection.getIdealList().get(0).getIdealName();
-            this.img2 = selection.getFilePath() + "/" + selection.getIdealList().get(1).getIdealName();
+            this.img1 = selection.getIdealList().get(0).getIdealName();
+            this.img2 = selection.getIdealList().get(1).getIdealName();
         }
 
     }

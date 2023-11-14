@@ -44,6 +44,7 @@ public class SelectionController {
             return "redirect:/login";
 
         model.addAttribute("selection", selectionService.getSelection(selectionId));
+
         return "play";
     }
 
