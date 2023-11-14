@@ -21,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.naming.spi.DirectoryManager;
@@ -33,6 +34,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -181,5 +183,23 @@ public class SelectionServiceImpl implements IdealSelectionService{
         } else {
             throw new CustomException(ErrorCode.DUPLICATED_NAME_EXIST);
         }
+    }
+
+    @Override
+    public IdealSelectionDto getPlayableSelection(Long selectionId, int round, HttpServletRequest request){
+        User user = sessionManager.getSession(request).orElseThrow(() -> new CustomException(ErrorCode.UNAUTHORIZED_USER));
+        IdealSelection selection = selectionMapper.findByIdAllResult(selectionId).orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
+        List<Ideal> idealList = selection.getIdealList();
+        List<Ideal> randomIdealList = new ArrayList<>();
+
+        Random random = new Random();
+
+        for(int i = 0; i < round; i++){
+            int randomIndex = random.nextInt(round);
+            randomIdealList.add(idealList.get(randomIndex));
+        }
+        selection.setIdealList(randomIdealList);
+
+        return new IdealSelectionDto(selection);
     }
 }

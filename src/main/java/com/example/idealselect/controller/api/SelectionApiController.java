@@ -20,15 +20,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.FileInputStream;
+
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
-import java.util.Objects;
 
 @Slf4j
 @RestController
@@ -88,6 +82,11 @@ public class SelectionApiController {
     public ResponseEntity deleteIdealSelection(@PathVariable Long id, HttpServletRequest request){
         selectionService.delete(id, request);
         return  new ResponseEntity(HttpStatus.OK);
+    }
+
+    @PostMapping("/play")
+    public IdealSelectionDto playSelection(@RequestParam Long selectionId, @RequestParam int round, HttpServletRequest request){
+        return selectionService.getPlayableSelection(selectionId, round, request);
     }
 
 }

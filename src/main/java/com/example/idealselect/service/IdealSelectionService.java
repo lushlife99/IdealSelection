@@ -26,4 +26,5 @@ public interface IdealSelectionService {
     IdealSelectionDto getSelection(Long selectionId, HttpServletRequest request);
     IdealSelectionDto getSelection(Long selectionId);
     void editIdealName(String filePath, IdealDto idealDto, HttpServletRequest request);
+    IdealSelectionDto getPlayableSelection(Long selectionId, int round, HttpServletRequest request);
 }

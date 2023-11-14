@@ -23,7 +23,7 @@ public class IdealSelectionDto {
     private String body;
     private String filePath;
     private int subCount;
-    private User creator;
+    private UserDto creator;
     private List<Ideal> idealList;
     private List<Reply> replyList;
     private LocalDateTime updateTime;
@@ -39,7 +39,7 @@ public class IdealSelectionDto {
         this.subCount = selection.getSubCount();
         this.idealList = selection.getIdealList();
         this.replyList = selection.getReplyList();
-        this.creator = selection.getCreator();
+        this.creator = new UserDto(selection.getCreator());
         this.updateTime = selection.getUpdateTime();
         if(idealList.size() > 1) {
             this.img1 = selection.getIdealList().get(0).getIdealName();
