@@ -114,8 +114,12 @@ public class SelectionServiceImpl implements IdealSelectionService{
     }
 
     @Override
-    public void updateWinCount(Long idealSelectionId, Long idealId, HttpServletRequest request) {
+    public void updateWinCount(Long winIdealId, Long loseIdealId, HttpServletRequest request) {
+        Ideal winIdeal = idealMapper.findById(winIdealId).orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
+        Ideal loseIdeal = idealMapper.findById(loseIdealId).orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
 
+        winIdeal.setWinCount(winIdeal.getWinCount()+1);
+        loseIdeal.setWinCount(loseIdeal.getWinCount()+1);
     }
 
     @Override
