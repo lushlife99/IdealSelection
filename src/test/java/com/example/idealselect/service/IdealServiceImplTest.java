@@ -48,8 +48,7 @@ class IdealServiceImplTest {
         List<Ideal> idealList= new ArrayList<>();
 
         for(int i = 0; i < 256; i++)  //256개 ideal 생성
-            idealList.add(Ideal.builder().idealName("Name").winRate(0.0).selection(selection).winCount(0).build());
-
+            idealList.add(Ideal.builder().idealName("Name").selectionId(selection.getId()).winCount(0).build());
 
         log.info("start save iterator. currentTime={}", LocalDateTime.now());
         for (Ideal ideal : idealList) {

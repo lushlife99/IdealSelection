@@ -18,7 +18,6 @@ public class UserDto {
     private Long id;
     private String userId;
     private String userName;
-    @JsonIgnore
     private List<IdealSelection> madeIdealList;
     private List<Reply> replyList;
 

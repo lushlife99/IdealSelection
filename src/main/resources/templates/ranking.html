@@ -10,6 +10,7 @@
     <style>
         .progress {
             width: 20vh;
+            height: 30px;
             margin-left: 20px;
         }
 
@@ -36,41 +37,42 @@
         </ul>
     </div>
 </nav>
-
-<table>
-    <thead>
-    <tr>
-        <th>번호</th>
-        <th>이미지</th>
-        <th>이상형 이름</th>
-        <th>우승 비율</th>
-        <th>승률</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="ideal, index : ${selection.getIdealList()}">
-        <td th:text="${index.count}"></td>
-        <td>
-            <img th:attr="img-id=${ideal.id}" th:src="'/api/selection/image/' + ${selection.filePath} + '/' + ${ideal.idealName}" alt="이미지" style="max-width: 120px; max-height: 200px;">
-        </td>
-        <td>
-            <span th:attr="data-id=${ideal.id}" th:text="${ideal.idealName}" style="width: 20vh; margin-left: 20px"></span>
-        </td>
-        <td>
-            <div class="progress">
-                <div class="progress-bar" role="progressbar" th:if="${selection.subCount != 0}" th:style="'width: ' + ${(ideal.finalWinCount) * 100 / (selection.subCount)} + '%'" th:text="${(ideal.finalWinCount) * 100/ (selection.subCount)  + '%'}"></div>
-                <div class="progress-bar" role="progressbar" th:if="${selection.subCount == 0}" th:style="'width: 0%'">0%</div>
-            </div>
-        </td>
-        <td>
-            <div class="progress">
-                <div class="progress-bar" role="progressbar" th:if="${ideal.battleCount != 0}" th:style="'width: ' + ${(ideal.winCount) * 100 / (ideal.battleCount)} + '%'" th:text="${(ideal.winCount) * 100/ (ideal.battleCount)  + '%'}"></div>
-                <div class="progress-bar" role="progressbar" th:if="${ideal.battleCount == 0}" th:style="'width: 0%'">0%</div>
-            </div>
-        </td>
-    </tr>
-    </tbody>
-</table>
+<div style="display: flex; flex-direction: column;">
+    <table>
+        <thead>
+        <tr>
+            <th>번호</th>
+            <th>이미지</th>
+            <th>이상형 이름</th>
+            <th>우승 비율</th>
+            <th>승률</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="ideal, index : ${selection.getIdealList()}">
+            <td th:text="${index.count}"></td>
+            <td>
+                <img th:attr="img-id=${ideal.id}" th:src="'/api/selection/image/' + ${selection.filePath} + '/' + ${ideal.idealName}" alt="이미지" style="max-width: 120px; max-height: 200px;">
+            </td>
+            <td>
+                <span th:attr="data-id=${ideal.id}" th:text="${ideal.idealName}" style="width: 20vh; margin-left: 20px"></span>
+            </td>
+            <td>
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" th:if="${selection.subCount != 0}" th:style="'width: ' + ${(ideal.finalWinCount) * 100 / (selection.subCount)} + '%'" th:text="${(ideal.finalWinCount) * 100/ (selection.subCount)  + '%'}"></div>
+                    <div class="progress-bar" role="progressbar" th:if="${selection.subCount == 0}" th:style="'width: 0%'">0%</div>
+                </div>
+            </td>
+            <td>
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" th:if="${ideal.battleCount != 0}" th:style="'width: ' + ${(ideal.winCount) * 100 / (ideal.battleCount)} + '%'" th:text="${(ideal.winCount) * 100/ (ideal.battleCount)  + '%'}"></div>
+                    <div class="progress-bar" role="progressbar" th:if="${ideal.battleCount == 0}" th:style="'width: 0%'">0%</div>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 
 </body>
 </html>
@@ -177,6 +179,4 @@
             }
         });
     }
-
-
 </script>

@@ -7,7 +7,6 @@
     <insert id="save" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
         insert into ideal (ideal_name, final_win_count, selection_id, win_count, battle_count)
         values (#{idealName}, #{finalWinCount}, #{selectionId}, #{winCount}, #{battleCount})
-        ON DUPLICATE KEY UPDATE ideal_name = values(ideal_name), final_win_count = values(final_win_count), win_count = values(win_count), battle_count = values(battle_count)
     </insert>
 
     <update id="update">

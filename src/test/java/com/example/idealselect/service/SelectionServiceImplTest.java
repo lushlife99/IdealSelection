@@ -33,7 +33,7 @@ class SelectionServiceImplTest {
 
     @BeforeAll
     static void config(){
-        user = User.builder().id(1L).userId("USERID").userName("USERNAME").password("PASSWORD").build();
+        user = User.builder().userId("USERID").userName("USERNAME").password("PASSWORD").build();
 
     }
 
@@ -52,18 +52,15 @@ class SelectionServiceImplTest {
         userMapper.save(user);
 
         for(int i = 0; i < 111; i++){
-            IdealSelection selection = IdealSelection.builder().title(TITLE).body(BODY).creator(user).subCount(0).filePath(UUID.randomUUID().toString()).updateTime(LocalDateTime.now()).build();
+            IdealSelection selection = IdealSelection.builder().title(UUID.randomUUID().toString()).body(BODY).creator(user).subCount(0).filePath(UUID.randomUUID().toString()).updateTime(LocalDateTime.now()).build();
             selectionMapper.save(selection);
         }
-
 
         List<IdealSelection> searchList1 = selectionMapper.findPageableByCreatorId(user.getId(), 0);
         List<IdealSelection> searchList2 = selectionMapper.findPageableByCreatorId(user.getId(), 100);
 
-
         Assertions.assertThat(searchList1.size()).isEqualTo(100);
         Assertions.assertThat(searchList2.size()).isEqualTo(11);
-
     }
 
 //    @Test
