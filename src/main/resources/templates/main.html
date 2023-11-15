@@ -259,6 +259,7 @@
 
     function handleRankingClick(event) {
         var selectedId = event.currentTarget.parentElement.getAttribute('data-id');
+        window.location.href = 'http://localhost:8080/ranking?id=' + selectedId;
 
     }
 

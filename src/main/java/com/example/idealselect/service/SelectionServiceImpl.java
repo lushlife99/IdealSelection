@@ -122,7 +122,7 @@ public class SelectionServiceImpl implements IdealSelectionService{
         for (Ideal ideal : selectionDto.getIdealList()) {
             Ideal updateIdeal = idealMapper.findById(ideal.getId()).orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
             updateIdeal.setWinCount(updateIdeal.getWinCount() + ideal.getWinCount());
-            updateIdeal.setBattleCount(updateIdeal.getBattleCount() + ideal.getWinCount());
+            updateIdeal.setBattleCount(updateIdeal.getBattleCount() + ideal.getBattleCount());
             if(ideal.getId().equals(winIdealId)) {
                 updateIdeal.setFinalWinCount(updateIdeal.getFinalWinCount() + 1);
             }

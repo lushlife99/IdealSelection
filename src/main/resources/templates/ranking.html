@@ -1,10 +1,182 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>rankingPage</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        .progress {
+            width: 20vh;
+            margin-left: 20px;
+        }
+
+    </style>
 </head>
 <body>
+<nav class="navbar navbar-expand-sm bg-light mb-3">
+    <div class="container-fluid">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="/main">이상형 월드컵</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/create">이상형 월드컵 만들기</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/mySelection">내 월드컵 관리</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="logout()">로그아웃</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<table>
+    <thead>
+    <tr>
+        <th>번호</th>
+        <th>이미지</th>
+        <th>이상형 이름</th>
+        <th>우승 비율</th>
+        <th>승률</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="ideal, index : ${selection.getIdealList()}">
+        <td th:text="${index.count}"></td>
+        <td>
+            <img th:attr="img-id=${ideal.id}" th:src="'/api/selection/image/' + ${selection.filePath} + '/' + ${ideal.idealName}" alt="이미지" style="max-width: 120px; max-height: 200px;">
+        </td>
+        <td>
+            <span th:attr="data-id=${ideal.id}" th:text="${ideal.idealName}" style="width: 20vh; margin-left: 20px"></span>
+        </td>
+        <td>
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" th:if="${selection.subCount != 0}" th:style="'width: ' + ${(ideal.finalWinCount) * 100 / (selection.subCount)} + '%'" th:text="${(ideal.finalWinCount) * 100/ (selection.subCount)  + '%'}"></div>
+                <div class="progress-bar" role="progressbar" th:if="${selection.subCount == 0}" th:style="'width: 0%'">0%</div>
+            </div>
+        </td>
+        <td>
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" th:if="${ideal.battleCount != 0}" th:style="'width: ' + ${(ideal.winCount) * 100 / (ideal.battleCount)} + '%'" th:text="${(ideal.winCount) * 100/ (ideal.battleCount)  + '%'}"></div>
+                <div class="progress-bar" role="progressbar" th:if="${ideal.battleCount == 0}" th:style="'width: 0%'">0%</div>
+            </div>
+        </td>
+    </tr>
+    </tbody>
+</table>
 
 </body>
 </html>
+
+<script th:inline="javascript">
+    var idealInputs = document.getElementsByClassName('idealNameInput');
+    for (var i = 0; i < idealInputs.length; i++) {
+        idealInputs[i].addEventListener('keydown', function(event) {
+            handleKeyPress(event);
+        });
+    }
+    var files = document.getElementsByClassName("file");
+    for (const file of files) {
+        file.addEventListener("change", function(event) {
+            handleFileChange(event);
+        })
+    }
+
+    var deleteBtn = document.getElementsByClassName('delete-btn');
+    for (const deleteBtnElement of deleteBtn) {
+        deleteBtnElement.addEventListener("click", function (event){
+            deleteBtnOnClicked(event);
+        })
+
+
+    }
+
+    function handleFileChange(event) {
+        console.log("asdfasdf");
+        var fileInput = event.target;
+        var file = fileInput.files[0];
+
+        var formData = new FormData();
+        formData.append('file', file);
+        formData.append('filePath', [[${selection.filePath}]]);
+        formData.append('idealId', event.target.getAttribute('data-id'));
+        formData.append('selectionId', [[${selection.id}]]);
+        $.ajax({
+            url: '/api/ideal/image',
+            type: 'PUT',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(response) {
+                var idealId = event.target.getAttribute('data-id');
+                var imgElement = document.querySelector('[img-id="' + idealId + '"]');
+                imgElement.src = '/api/selection/image/' + [[${selection.filePath}]] + '/' + response.idealName + '?_t=' + new Date().getTime();
+            },
+            error: function(error) {
+                console.error('File upload error', error);
+            }
+        });
+    }
+    function handleKeyPress(event) {
+        var idealId = event.target.getAttribute('data-id')
+        console.log(event.target.value);
+        if (event.key === 'Enter') {
+
+            $.ajax({
+                url: '/api/ideal/' + encodeURIComponent([[${selection.filePath}]]),
+                type: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                data: JSON.stringify({
+                    id: idealId,
+                    idealName: event.target.value,
+                }),
+                success: function(response) {
+                    console.log('Ajax 요청 성공', response);
+                },
+                error: function(error) {
+                    console.error('Ajax 요청 실패', error);
+                }
+            });
+        }
+    }
+
+    function deleteBtnOnClicked(event){
+        console.log(event);
+        var idealId = event.currentTarget.getAttribute("delete-btn-id");
+
+        $.ajax({
+            url: '/api/ideal/' + encodeURIComponent(idealId),
+            type: 'DELETE',
+            success: function(response) {
+                window.location.reload();
+            },
+            error: function(error) {
+                console.error('Ajax 요청 실패', error);
+            }
+        });
+    }
+    function logout() {
+        $.ajax({
+            type: 'GET',
+            url: '/api/logOut',
+            success: function (response) {
+                alert("로그아웃");
+                window.location.href = '/login';
+            },
+            error: function (error) {
+                alert(error.responseJSON.message);
+            }
+        });
+    }
+
+
+</script>

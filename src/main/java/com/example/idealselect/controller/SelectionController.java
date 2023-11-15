@@ -64,4 +64,13 @@ public class SelectionController {
         model.addAttribute("selection", selectionService.getSelection(selectionId, request));
         return "edit";
     }
+
+    @GetMapping("/ranking")
+    public String rankingPage(@RequestParam Long id, Model model, HttpServletRequest request){
+        if (sessionManager.getSession(request).isEmpty())
+            return "redirect:/login";
+
+        model.addAttribute("selection", selectionService.getSelection(id, request));
+        return "ranking";
+    }
 }

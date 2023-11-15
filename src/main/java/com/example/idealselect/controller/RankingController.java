@@ -14,9 +14,5 @@ public class RankingController {
     private final IdealSelectionService selectionService;
     private final ReplyService replyService;
 
-    @GetMapping("/ranking")
-    public String rankingPage(){
 
-        return "ranking";
-    }
 }
