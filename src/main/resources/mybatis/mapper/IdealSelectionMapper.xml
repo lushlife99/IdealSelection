@@ -52,6 +52,7 @@
     <insert id="save" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
         insert into ideal_selection (title, body, file_path, sub_count, creator_id, update_time)
         values (#{title}, #{body}, #{filePath}, #{subCount}, #{creator.id}, #{updateTime})
+
     </insert>
 
     <update id="update">

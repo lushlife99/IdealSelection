@@ -18,7 +18,7 @@ public interface IdealSelectionService {
 
     IdealSelectionDto getRanking(HttpServletRequest request);
     void updateWinRate(Long idealSelectionId, Long winIdealId, Long defeatIdealId, HttpServletRequest request);
-    void updateWinCount(Long winIdealId, Long loseIdealId, HttpServletRequest request);
+    void updateWinCount(Long winIdealId, IdealSelectionDto selectionDto, HttpServletRequest request);
     void updateSubCount(Long idealSelectionId, HttpServletRequest request);
     List<IdealSelectionDto> getCreationList(int page, HttpServletRequest request);
     byte[] getIdealImg(String imageName, String imageName2) throws IOException;

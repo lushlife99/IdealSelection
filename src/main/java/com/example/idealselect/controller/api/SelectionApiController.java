@@ -89,11 +89,16 @@ public class SelectionApiController {
         return selectionService.getPlayableSelection(selectionId, round, request);
     }
 
-    @PutMapping("/play/winCount")
-    public ResponseEntity updateWinCount(@RequestParam Long winIdealId, @RequestParam Long loseIdealId, HttpServletRequest request){
-        selectionService.updateWinCount(winIdealId, loseIdealId, request);
+//    @PutMapping("/play/winCount")
+//    public ResponseEntity updateWinCount(@RequestParam Long winIdealId, @RequestParam Long loseIdealId, HttpServletRequest request){
+//        selectionService.updateWinCount(winIdealId, loseIdealId, request);
+//        return new ResponseEntity(HttpStatus.OK);
+//    }
+
+    @PutMapping("/play/endGame/{winIdealId}")
+    public ResponseEntity updateCounts(@PathVariable Long winIdealId, @RequestBody IdealSelectionDto playingSelection, HttpServletRequest request){
+        selectionService.updateWinCount(winIdealId, playingSelection, request);
         return new ResponseEntity(HttpStatus.OK);
     }
-
 
 }

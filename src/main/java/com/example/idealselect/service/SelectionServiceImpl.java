@@ -114,12 +114,22 @@ public class SelectionServiceImpl implements IdealSelectionService{
     }
 
     @Override
-    public void updateWinCount(Long winIdealId, Long loseIdealId, HttpServletRequest request) {
-        Ideal winIdeal = idealMapper.findById(winIdealId).orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
-        Ideal loseIdeal = idealMapper.findById(loseIdealId).orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
+    public void updateWinCount(Long winIdealId, IdealSelectionDto selectionDto, HttpServletRequest request) {
+        IdealSelection selection = selectionMapper.findByIdAllResult(selectionDto.getId()).orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
+        List<Ideal> idealList = new ArrayList<>();
 
-        winIdeal.setWinCount(winIdeal.getWinCount()+1);
-        loseIdeal.setWinCount(loseIdeal.getWinCount()+1);
+        selection.setSubCount(selection.getSubCount() + 1);
+        for (Ideal ideal : selectionDto.getIdealList()) {
+            Ideal updateIdeal = idealMapper.findById(ideal.getId()).orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
+            updateIdeal.setWinCount(updateIdeal.getWinCount() + ideal.getWinCount());
+            updateIdeal.setBattleCount(updateIdeal.getBattleCount() + ideal.getWinCount());
+            if(ideal.getId().equals(winIdealId)) {
+                updateIdeal.setFinalWinCount(updateIdeal.getFinalWinCount() + 1);
+            }
+            idealList.add(updateIdeal);
+        }
+        idealMapper.saveAll(idealList);
+        selectionMapper.update(selection.getId(),selection);
     }
 
     @Override

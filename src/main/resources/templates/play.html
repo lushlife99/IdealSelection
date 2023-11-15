@@ -145,7 +145,7 @@
                 if(ideal.id == winIdealId){
                     ideal.battleCount++;
                     ideal.winCount++;
-                    nextRoundIdeals.push(winIdealId);
+                    nextRoundIdeals.push(ideal);
                 } else if(ideal.id == loseIdealId)
                     ideal.battleCount++;
             });
@@ -154,13 +154,29 @@
                 currentRound++;
             }
             else {
-                currentTotalRound /= 2;
-                currentRound = 1;
-                currentRoundIdeals = [];
-                for (var i = 0; i < nextRoundIdeals.length; i++){
-                    currentRoundIdeals.push(playingSelection.idealList[nextRoundIdeals[i]]);
+                if(currentTotalRound == 1){
+
+                    playingSelection.idealList = copyIdealList;
+                    console.log(playingSelection);
+                    $.ajax({
+                        type: 'PUT',
+                        url: 'http://localhost:8080/api/play/endGame/' + winIdealId,
+                        contentType: 'application/json',
+                        data : JSON.stringify(playingSelection),
+                        success: function (response) {
+                            window.location.href = 'http://localhost:8080/ranking?id=' +selection.id;
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('AJAX 요청 실패:', status, error);
+                        }
+                    });
+                } else {
+                    currentTotalRound /= 2;
+                    currentRound = 1;
+                    currentRoundIdeals = nextRoundIdeals;
+                    nextRoundIdeals = [];
                 }
-                nextRoundIdeals = [];
+
             }
             createCustomElements();
         });
@@ -173,7 +189,7 @@
                 if(ideal.id == winIdealId){
                     ideal.battleCount++;
                     ideal.winCount++;
-                    nextRoundIdeals.push(winIdealId);
+                    nextRoundIdeals.push(ideal);
                 } else if(ideal.id == loseIdealId) {
                     ideal.battleCount++;
                 }
@@ -183,13 +199,28 @@
                 currentRound++;
             }
             else {
-                currentTotalRound /= 2;
-                currentRound = 1;
-                currentRoundIdeals = [];
-                for (var i = 0; i < nextRoundIdeals.length; i++){
-                    currentRoundIdeals.push(playingSelection.idealList[nextRoundIdeals[i]]);
+                if(currentTotalRound == 1) {
+
+                    playingSelection.idealList = copyIdealList;
+                    console.log(playingSelection);
+                    $.ajax({
+                        type: 'PUT',
+                        url: 'http://localhost:8080/api/play/endGame/' + winIdealId,
+                        contentType: 'application/json',
+                        data: JSON.stringify(playingSelection),
+                        success: function (response) {
+                            window.location.href = 'http://localhost:8080/ranking?id=' + selection.id;
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('AJAX 요청 실패:', status, error);
+                        }
+                    });
+                } else {
+                    currentTotalRound /= 2;
+                    currentRound = 1;
+                    currentRoundIdeals = nextRoundIdeals;
+                    nextRoundIdeals = [];
                 }
-                nextRoundIdeals = [];
             }
             createCustomElements();
         });
@@ -232,6 +263,7 @@
                             for(var i = 0; i < copyIdealList.length; i++){
                                 copyIdealList[i].battleCount = 0;
                                 copyIdealList[i].winCount = 0;
+                                copyIdealList[i].finalWinCount = 0;
                             }
                             createCustomElements();
                         },
