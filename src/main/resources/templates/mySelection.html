@@ -87,7 +87,7 @@
     <li th:if="${pagePrefix != 0}">
         <a href="#" onclick="changePage('prev')">이전</a>
     </li>
-    <li th:each="i : ${#numbers.sequence(1, num)}">
+    <li th:if="${num != 0}" th:each="i : ${#numbers.sequence(1, num)}">
         <a href="#" th:attr="onclick='changePage(' + ${i} + ')'" th:text="(${pagePrefix} + ${i})">0</a>
     </li>
     <li th:if="${selectionList.size() == 100}">
@@ -231,7 +231,7 @@
         var paginationLinks = document.querySelectorAll('.pagination a');
         paginationLinks.forEach(function (link) {
             link.classList.remove('active');
-            if (link.innerHTML == currentPage) {
+            if (link.innerHTML == [[${pagePrefix}]] + currentPage) {
                 link.classList.add('active');
             }
         });

@@ -1,6 +1,9 @@
 package com.example.idealselect.controller;
 
+import com.example.idealselect.dto.UserDto;
+import com.example.idealselect.entity.User;
 import com.example.idealselect.service.IdealSelectionService;
+import com.example.idealselect.service.ReplyService;
 import com.example.idealselect.session.SessionManager;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Optional;
+
 
 @Controller
 @RequiredArgsConstructor
@@ -16,6 +21,7 @@ public class SelectionController {
 
     private final IdealSelectionService selectionService;
     private final SessionManager sessionManager;
+    private final ReplyService replyService;
 
     @GetMapping("/main")
     public String mainPage(@RequestParam(value = "pagePrefix", required = false, defaultValue = "0") Integer pagePrefix, Model model, HttpServletRequest request){
@@ -71,5 +77,17 @@ public class SelectionController {
 
         model.addAttribute("selection", selectionService.getSelection(id, request));
         return "ranking";
+    }
+
+    @GetMapping("/reply")
+    public String replyPage(@RequestParam Long id, @RequestParam(value = "pagePrefix", required = false, defaultValue = "0") Integer pagePrefix, Model model, HttpServletRequest request){
+        Optional<User> session = sessionManager.getSession(request);
+        if (session.isEmpty())
+            return "redirect:/login";
+
+        model.addAttribute("replyList", replyService.getReplyList(id, request));
+        model.addAttribute("user", new UserDto(session.get()));
+        model.addAttribute("pagePrefix", pagePrefix);
+        return "reply";
     }
 }

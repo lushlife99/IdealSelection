@@ -21,13 +21,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.naming.spi.DirectoryManager;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -216,4 +213,6 @@ public class SelectionServiceImpl implements IdealSelectionService{
         selection.setIdealList(randomIdealList);
         return new IdealSelectionDto(selection);
     }
+
+
 }

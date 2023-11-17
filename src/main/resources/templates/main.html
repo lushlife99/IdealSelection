@@ -113,7 +113,7 @@
     <li th:if="${pagePrefix != 0}">
         <a href="#" onclick="changePage('prev')">이전</a>
     </li>
-    <li th:each="i : ${#numbers.sequence(1, num)}">
+    <li th:if="${num != 0}" th:each="i : ${#numbers.sequence(1, num)}">
         <a href="#" th:attr="onclick='changePage(' + ${i} + ')'" th:text="(${pagePrefix} + ${i})">0</a>
     </li>
     <li th:if="${selectionList.size() == 100}">
@@ -145,6 +145,7 @@
         // Update the active state of the pagination buttons.
         //updatePagination();
         updateContent();
+        updatePagination();
     }
     console.log(1);
 
@@ -227,8 +228,14 @@
             rankingButton.className = 'btn btn-sm btn-outline btn-primary fdelete';
             rankingButton.innerHTML = '<i class="fa fa-trash"></i> 랭킹보기';
 
+            var replyButton = document.createElement('button');
+            replyButton.type = 'button';
+            replyButton.className = 'btn btn-sm btn-outline btn-secondary';
+            replyButton.innerHTML = '<i class="fa fa-trash"></i> 댓글보기';
+
             btnGroupDiv.appendChild(startButton);
             btnGroupDiv.appendChild(rankingButton);
+            btnGroupDiv.appendChild(replyButton);
 
             // Append everything to the container div
             productDescDiv.appendChild(productNameAnchor);
@@ -249,6 +256,10 @@
             rankingButton.addEventListener('click', function(event) {
                 handleRankingClick(event);
             });
+
+            replyButton.addEventListener('click', function (event) {
+                handleReplyClick(event);
+            })
         }
     }
 
@@ -260,7 +271,11 @@
     function handleRankingClick(event) {
         var selectedId = event.currentTarget.parentElement.getAttribute('data-id');
         window.location.href = 'http://localhost:8080/ranking?id=' + selectedId;
+    }
 
+    function handleReplyClick(event) {
+        var selectedId = event.currentTarget.parentElement.getAttribute('data-id');
+        window.location.href = 'http://localhost:8080/reply?id=' + selectedId;
     }
 
     function getNextPaginationList() {
@@ -277,7 +292,7 @@
         var paginationLinks = document.querySelectorAll('.pagination a');
         paginationLinks.forEach(function (link) {
             link.classList.remove('active');
-            if (link.innerHTML == currentPage) {
+            if (link.innerHTML == [[${pagePrefix}]] + currentPage) {
                 link.classList.add('active');
             }
         });

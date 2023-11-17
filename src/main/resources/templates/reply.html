@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ReplyPage</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        .pagination {
+            display: flex;
+            list-style: none;
+            padding: 0;
+        }
+
+        .pagination li {
+            margin: 0 5px;
+        }
+
+        .pagination a {
+            text-decoration: none;
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            color: #333;
+        }
+
+        .pagination .active {
+            background-color: #007BFF;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-sm bg-light mb-3">
+    <div class="container-fluid">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="/main">이상형 월드컵</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/create">이상형 월드컵 만들기</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/mySelection">내 월드컵 관리</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="logout()">로그아웃</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div id="content" class="row equal mt-5">
+
+</div>
+
+<ul class="pagination mt-5 d-flex justify-content-center" id="pagination" th:with="num=(${replyList == null ? 0 : (replyList.size() % 10 == 0 ? replyList.size() / 10 : replyList.size() / 10 + 1)})">
+    <li th:if="${pagePrefix != 0}">
+        <a href="#" onclick="changePage('prev')">이전</a>
+    </li>
+    <li th:if="${num != 0}" th:each="i : ${#numbers.sequence(1, num)}">
+        <a href="#" th:attr="onclick='changePage(' + ${i} + ')'" th:text="(${pagePrefix} + ${i})"></a>
+    </li>
+    <li th:if="${replyList.size() == 100}">
+        <a href="#" onclick="changePage('next')">다음</a>
+    </li>
+</ul>
+</body>
+</html>
+<script th:inline="javascript">
+
+    function changePage(page) {
+        if (page === 'prev') {
+            getPrevPaginationList();
+        } else if (page === 'next') {
+            getNextPaginationList();
+        } else if (typeof page === 'number') {
+            console.log(page);
+            currentPage = page;
+        }
+
+        updatePagination();
+        updateContent();
+    }
+
+    function getNextPaginationList() {
+        console.log("next");
+        window.location.href = '/main?pagePrefix=' + (parseInt([[${pagePrefix}]]) + 10);
+    }
+
+    function getPrevPaginationList() {
+        console.log("prev");
+        window.location.href = '/main?pagePrefix=' + (parseInt([[${pagePrefix}]]) - 10);
+    }
+
+    function updatePagination() {
+        var paginationLinks = document.querySelectorAll('.pagination a');
+        paginationLinks.forEach(function (link) {
+            link.classList.remove('active');
+            if (link.innerHTML == [[${pagePrefix}]] + currentPage) {
+                link.classList.add('active');
+            }
+        });
+    }
+    function logout() {
+        $.ajax({
+            type: 'GET',
+            url: '/api/logOut',
+            success: function (response) {
+                alert("로그아웃");
+                window.location.href = '/login';
+            },
+            error: function (error) {
+                alert(error.responseJSON.message);
+            }
+        });
+    }
+
+    changePage(1);
+</script>

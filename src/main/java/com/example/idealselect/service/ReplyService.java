@@ -8,7 +8,8 @@ import java.util.List;
 
 public interface ReplyService {
 
-    List<ReplyDto> create(ReplyDto replyDto, Long idealSelectionId, HttpServletRequest request);
-    List<ReplyDto> update(ReplyDto replyDto, Long idealSelectionId, HttpServletRequest request);
-    List<ReplyDto> delete(ReplyDto replyDto, Long idealSelectionId, HttpServletRequest request);
+    void create(ReplyDto replyDto, Long idealSelectionId, HttpServletRequest request);
+    void update(ReplyDto replyDto, Long idealSelectionId, HttpServletRequest request);
+    void delete(ReplyDto replyDto, Long idealSelectionId, HttpServletRequest request);
+    List<ReplyDto> getReplyList(Long idealSelectionId, HttpServletRequest request);
 }
