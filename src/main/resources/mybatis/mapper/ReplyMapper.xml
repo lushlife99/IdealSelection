@@ -30,6 +30,14 @@
         where selection_id = #{selectionId}
     </select>
 
+    <select id="findLimitListBySelectionId" resultType="Reply">
+        select id, comment, author_id as userId, author_name as userName, selection_id as idealSelectionId, update_time
+        from reply
+        where selection_id = #{selectionId}
+        order by update_time desc
+        limit #{startNum}, 100
+    </select>
+
     <delete id="deleteById">
         delete
         from reply

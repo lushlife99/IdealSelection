@@ -30,6 +30,16 @@
             background-color: #007BFF;
             color: #fff;
         }
+
+        .comment-box {
+             background-color: white;
+             width: 100vh;
+             height: 6vh;
+             border: 1px solid gray;
+        }
+        .comment {
+            margin-bottom: 0px;
+        }
     </style>
 </head>
 <body>
@@ -54,7 +64,12 @@
     </div>
 </nav>
 
-<div id="content" class="row equal mt-5">
+<div id="writeCommentBox" style="display: flex; align-items: center; justify-content: center; margin-top: 20px;">
+    <input type="text" id="comment-input" style="width: 60vh; height: 6vh; margin-right: 5px;" />
+    <button id="saveComment" type="button" style="width: 6vh; height: 6vh;">댓글 작성</button>
+</div>
+
+<div id="content" style="margin-top: 40px; display: flex; flex-direction: column; align-items: center;"></div>
 
 </div>
 
@@ -73,19 +88,84 @@
 </html>
 <script th:inline="javascript">
 
+    var replyList = [[ ${replyList} ]];
+    console.log(replyList);
+    var currentPage = 1;
+    var itemsPerPage = 10;
+
+    var saveBtn = document.getElementById("saveComment");
+    saveBtn.addEventListener('click', function (event){
+        saveComment();
+    })
+
+    function saveComment() {
+        var comment = document.getElementById("comment-input").value;
+        $.ajax({
+            type: 'POST',
+            url: '/api/reply/save', // URL 수정
+            data: JSON.stringify({
+                comment: comment,
+                idealSelectionId: [[${selectionId}]]
+            }),
+            contentType: "application/json",
+            success: function (response) {
+                console.log(response);
+            },
+            error: function (error) {
+                alert(error.responseJSON.message);
+            }
+        });
+    }
     function changePage(page) {
         if (page === 'prev') {
             getPrevPaginationList();
         } else if (page === 'next') {
             getNextPaginationList();
         } else if (typeof page === 'number') {
-            console.log(page);
             currentPage = page;
         }
 
         updatePagination();
         updateContent();
     }
+
+    function updateContent() {
+        var startIdx = (currentPage - 1) * itemsPerPage;
+        var endIdx = startIdx + itemsPerPage;
+
+        var contentDiv = document.getElementById('content');
+        contentDiv.innerHTML = '';
+
+        for (var i = startIdx; i < endIdx && i < replyList.length; i++) {
+            var reply = replyList[i];
+            var replyDiv = document.createElement('div');
+            replyDiv.className = 'comment-box';
+
+            var commentHeadDiv = document.createElement('div');
+            commentHeadDiv.style.display = 'flex';
+
+            var authorName = document.createElement('h4');
+            authorName.style.margin = '2px';
+            authorName.textContent = reply.userName + "   |   ";
+
+            var updateTime = document.createElement('p');
+            updateTime.style.margin = '2px';
+            updateTime.textContent = reply.updateTime;
+
+            commentHeadDiv.appendChild(authorName);
+            commentHeadDiv.appendChild(updateTime);
+
+            var commentDiv = document.createElement('p');
+            commentDiv.className = "comment";
+            commentDiv.textContent = reply.comment;
+
+            replyDiv.appendChild(commentHeadDiv);
+            replyDiv.appendChild(commentDiv);
+
+            contentDiv.appendChild(replyDiv);
+        }
+    }
+
 
     function getNextPaginationList() {
         console.log("next");

@@ -12,6 +12,7 @@ import com.example.idealselect.session.SessionManager;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -26,7 +27,8 @@ public class ReplyServiceImpl implements ReplyService {
     private final SessionManager sessionManager;
 
     @Override
-    public void create(ReplyDto replyDto, Long idealSelectionId, HttpServletRequest request) {
+    @Transactional
+    public void create(ReplyDto replyDto, HttpServletRequest request) {
         User user = sessionManager.getSession(request).orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
         Reply reply = new Reply(replyDto);
         reply.setUserId(user.getId());
@@ -37,7 +39,8 @@ public class ReplyServiceImpl implements ReplyService {
     }
 
     @Override
-    public void update(ReplyDto replyDto, Long idealSelectionId, HttpServletRequest request) {
+    @Transactional
+    public void update(ReplyDto replyDto, HttpServletRequest request) {
 
         User user = sessionManager.getSession(request).orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
         Reply reply = replyMapper.findById(replyDto.getId()).orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
@@ -51,7 +54,8 @@ public class ReplyServiceImpl implements ReplyService {
     }
 
     @Override
-    public void delete(ReplyDto replyDto, Long idealSelectionId, HttpServletRequest request) {
+    @Transactional
+    public void delete(ReplyDto replyDto, HttpServletRequest request) {
         User user = sessionManager.getSession(request).orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
         Reply reply = replyMapper.findById(replyDto.getId()).orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
         if(!reply.getUserId().equals(user.getId()))
@@ -61,13 +65,14 @@ public class ReplyServiceImpl implements ReplyService {
     }
 
     @Override
-    public List<ReplyDto> getReplyList(Long idealSelectionId, HttpServletRequest request){
-        IdealSelection selection = selectionMapper.findByIdAllResult(idealSelectionId).orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
-        List<ReplyDto> replyList = new ArrayList<>();
+    public List<ReplyDto> getReplyList(Long idealSelectionId, int pageNum, HttpServletRequest request){
 
-        for (Reply reply : selection.getReplyList()) {
-            replyList.add(new ReplyDto(reply));
+        List<Reply> replyList = replyMapper.findLimitListBySelectionId(idealSelectionId, pageNum);
+        List<ReplyDto> replyDtoList = new ArrayList<>();
+
+        for (Reply reply : replyList) {
+            replyDtoList.add(new ReplyDto(reply));
         }
-        return replyList;
+        return replyDtoList;
     }
 }

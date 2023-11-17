@@ -80,14 +80,15 @@ public class SelectionController {
     }
 
     @GetMapping("/reply")
-    public String replyPage(@RequestParam Long id, @RequestParam(value = "pagePrefix", required = false, defaultValue = "0") Integer pagePrefix, Model model, HttpServletRequest request){
+    public String replyPage(@RequestParam("id") Long selectionId, @RequestParam(value = "pagePrefix", required = false, defaultValue = "0") Integer pagePrefix, Model model, HttpServletRequest request){
         Optional<User> session = sessionManager.getSession(request);
         if (session.isEmpty())
             return "redirect:/login";
 
-        model.addAttribute("replyList", replyService.getReplyList(id, request));
+        model.addAttribute("replyList", replyService.getReplyList(selectionId, pagePrefix, request));
         model.addAttribute("user", new UserDto(session.get()));
         model.addAttribute("pagePrefix", pagePrefix);
+        model.addAttribute("selectionId", selectionId);
         return "reply";
     }
 }

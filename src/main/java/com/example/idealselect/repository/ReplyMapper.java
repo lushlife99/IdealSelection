@@ -14,6 +14,7 @@ public interface ReplyMapper {
     void update(Long id, Reply reply);
     Optional<Reply> findById(Long id);
     List<Reply> findAllBySelectionId(Long selectionId);
+    List<Reply> findLimitListBySelectionId(Long selectionId, int startNum);
 
     void deleteById(Long id);
 }
