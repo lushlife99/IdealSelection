@@ -143,6 +143,7 @@
 
             var commentHeadDiv = document.createElement('div');
             commentHeadDiv.style.display = 'flex';
+            commentHeadDiv.style.marginLeft = '12px';
 
             var authorName = document.createElement('h4');
             authorName.style.margin = '2px';
@@ -155,7 +156,39 @@
             commentHeadDiv.appendChild(authorName);
             commentHeadDiv.appendChild(updateTime);
 
+            if (reply.userId == [[${user.id}]]) {
+                var editBtn = document.createElement('button');
+                editBtn.type = 'button';
+                editBtn.className = 'btn btn-sm btn-outline btn-secondary';
+                editBtn.textContent = '수정';
+                editBtn.id = reply.id;
+
+                var deleteBtn = document.createElement('button');
+                deleteBtn.type = 'button';
+                deleteBtn.className = 'btn btn-sm btn-outline btn-danger';
+                deleteBtn.textContent = '삭제';
+                deleteBtn.id = reply.id;
+
+                editBtn.addEventListener('click', function () {
+                    console.log("수정");
+                });
+
+                deleteBtn.addEventListener('click', function () {
+                    console.log("삭제");
+                });
+
+                var btnContainer = document.createElement('div');
+                btnContainer.style.marginLeft = 'auto';
+                btnContainer.appendChild(editBtn);
+                btnContainer.appendChild(deleteBtn);
+
+                commentHeadDiv.appendChild(btnContainer);
+            }
+
+
+
             var commentDiv = document.createElement('p');
+            commentDiv.style = 'margin-left: 12px;';
             commentDiv.className = "comment";
             commentDiv.textContent = reply.comment;
 
@@ -169,12 +202,12 @@
 
     function getNextPaginationList() {
         console.log("next");
-        window.location.href = '/main?pagePrefix=' + (parseInt([[${pagePrefix}]]) + 10);
+        window.location.href = "/reply?id=" + [[${selectionId}]] + "&pagePrefix=" + (parseInt([[${pagePrefix}]]) + 10);
     }
 
     function getPrevPaginationList() {
         console.log("prev");
-        window.location.href = '/main?pagePrefix=' + (parseInt([[${pagePrefix}]]) - 10);
+        window.location.href = "/reply?id=" + [[${selectionId}]] + "&pagePrefix=" + (parseInt([[${pagePrefix}]]) - 10);
     }
 
     function updatePagination() {

@@ -31,13 +31,11 @@
             </div>
             <button type="button" class="btn btn-primary" onclick="submitForm()">Submit</button>
 
-            <!-- Join button -->
             <button type="button" class="btn btn-secondary" onclick="goToJoinPage()">Join</button>
         </form>
     </div>
 </div>
 
-<!-- Include Thymeleaf attribute for CSRF token -->
 <script th:inline="javascript">
     function submitForm() {
         var userId = $('#usr').val();
@@ -50,7 +48,7 @@
 
         $.ajax({
             type: 'POST',
-            url: '/api/login',  // 실제 로그인 엔드포인트로 변경
+            url: '/api/login',
             contentType: 'application/x-www-form-urlencoded',
             data: data,
             success: function (response) {
@@ -62,7 +60,6 @@
         });
     }
 
-    // Function to navigate to the '/join' page
     function goToJoinPage() {
         window.location.href = '/join';
     }

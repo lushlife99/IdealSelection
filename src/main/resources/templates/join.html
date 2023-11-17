@@ -20,22 +20,49 @@
     <div class="root">
         <h2>회원가입</h2>
         <p>이미 계정이 있으신가요? <a href="/login">로그인</a></p>
-        <form action="/register" method="post">
+        <form action="/api/join" method="post">
             <div class="form-group">
-                <label for="usr">사용자 ID:</label>
-                <input type="text" class="form-control" id="usr" name="username" required>
+                <label for="userId">ID:</label>
+                <input type="text" class="form-control" id="userId" name="userId" required>
             </div>
             <div class="form-group">
-                <label for="pwd">비밀번호:</label>
-                <input type="password" class="form-control" id="pwd" name="password" required>
+                <label for="userName">이름:</label>
+                <input type="text" class="form-control" id="userName" name="userName" required>
             </div>
             <div class="form-group">
-                <label for="confirmPwd">비밀번호 확인:</label>
-                <input type="password" class="form-control" id="confirmPwd" name="confirmPassword" required>
+                <label for="password">비밀번호:</label>
+                <input type="password" class="form-control" id="password" name="password" required>
             </div>
-            <button type="submit" class="btn btn-primary">가입하기</button>
+            <button type="submit" class="btn btn-primary" onclick="join()">가입하기</button>
         </form>
     </div>
 </div>
 </body>
 </html>
+<script th:inline="javascript">
+    function submitForm() {
+        var userId = $('#userId').val();
+        var password = $('#password').val();
+        var userName = $('#userName').val();
+
+        var data = {
+            userId: userId,
+            password: password,
+            userName: userName
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: '/api/join',
+            contentType: 'application/x-www-form-urlencoded',
+            data: data,
+            success: function (response) {
+                console.log("asdfasdf");
+                window.location.href = 'http://localhost:8080/login';
+            },
+            error: function (error) {
+                alert(error.responseJSON.message);
+            }
+        });
+    }
+</script>
