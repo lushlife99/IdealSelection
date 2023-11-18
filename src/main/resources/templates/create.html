@@ -99,7 +99,7 @@
     function logout() {
         $.ajax({
             type: 'GET',
-            url: '/api/logOut',  // 실제 로그인 엔드포인트로 변경
+            url: '/api/auth/logOut',  // 실제 로그인 엔드포인트로 변경
             success: function (response) {
                 alert("로그아웃");
                 window.location.href = '/login';

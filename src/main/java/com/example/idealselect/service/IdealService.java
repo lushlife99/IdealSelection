@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -73,6 +74,22 @@ public class IdealService {
             idealMapper.save(ideal);
         } catch (IOException e) {
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public void editIdealName(String filePath, IdealDto idealDto, HttpServletRequest request){
+
+        Ideal ideal = idealMapper.findById(idealDto.getId()).orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
+        Path imagePath = Paths.get(rootFilePath, filePath, ideal.getIdealName());
+        File file = imagePath.toFile();
+
+        Path newFilePath = Paths.get(rootFilePath, filePath, idealDto.getIdealName());
+        File newFile = newFilePath.toFile();
+
+        if (file.renameTo(newFile)) {
+            idealMapper.update(idealDto.getId(), new Ideal(idealDto));
+        } else {
+            throw new CustomException(ErrorCode.DUPLICATED_NAME_EXIST);
         }
     }
 }

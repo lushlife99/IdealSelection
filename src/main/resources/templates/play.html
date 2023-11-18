@@ -209,7 +209,7 @@
                     console.log(playingSelection);
                     $.ajax({
                         type: 'PUT',
-                        url: 'http://localhost:8080/api/play/endGame/' + winIdealId,
+                        url: 'http://localhost:8080/api/selection/play/endGame/' + winIdealId,
                         contentType: 'application/json',
                         data: JSON.stringify(playingSelection),
                         success: function (response) {
@@ -253,7 +253,7 @@
                     currentTotalRound = totalRound/2;
                     $.ajax({
                         type: 'POST',
-                        url: 'http://localhost:8080/api/play',
+                        url: 'http://localhost:8080/api/selection/play',
                         data : {
                           selectionId : selection.id,
                           round : totalRound

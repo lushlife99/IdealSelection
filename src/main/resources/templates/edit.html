@@ -83,7 +83,7 @@
     formData.append('selectionId', [[${selection.id}]]);
 
     $.ajax({
-      url: '/api/ideal', // Adjust the URL endpoint accordingly
+      url: '/api/ideal/save',
       type: 'POST',
       data: formData,
       contentType: false,
@@ -190,7 +190,7 @@
   function logout() {
     $.ajax({
       type: 'GET',
-      url: '/api/logOut',
+      url: '/api/auth/logOut',
       success: function (response) {
         alert("로그아웃");
         window.location.href = '/login';

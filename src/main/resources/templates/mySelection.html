@@ -240,7 +240,7 @@
     function logout() {
         $.ajax({
             type: 'GET',
-            url: '/api/logOut',
+            url: '/api/auth/logOut',
             success: function (response) {
                 alert("로그아웃");
                 window.location.href = '/login';
@@ -275,7 +275,7 @@
     function handleDeleteClick(selectionId) {
 
         $.ajax({
-            url: '/api/idealSelection/' + selectionId,
+            url: '/api/selection/' + selectionId,
             type: 'DELETE', // or 'GET' depending on your server
             success: function(response) {
                 window.location.reload();

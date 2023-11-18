@@ -51,9 +51,9 @@
             userName: userName
         };
 
-        $.ajax({
+        $.ajax({auth
             type: 'POST',
-            url: '/api/join',
+            url: '/api/auth/join',
             contentType: 'application/x-www-form-urlencoded',
             data: data,
             success: function (response) {

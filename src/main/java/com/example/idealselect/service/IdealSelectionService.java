@@ -16,15 +16,12 @@ public interface IdealSelectionService {
     IdealSelectionDto update(IdealSelectionDto idealSelection, HttpServletRequest request);
     void delete(Long id, HttpServletRequest request);
 
-    IdealSelectionDto getRanking(HttpServletRequest request);
-    void updateWinRate(Long idealSelectionId, Long winIdealId, Long defeatIdealId, HttpServletRequest request);
     void updateWinCount(Long winIdealId, IdealSelectionDto selectionDto, HttpServletRequest request);
-    void updateSubCount(Long idealSelectionId, HttpServletRequest request);
+
     List<IdealSelectionDto> getCreationList(int page, HttpServletRequest request);
     byte[] getIdealImg(String imageName, String imageName2) throws IOException;
 
     IdealSelectionDto getSelection(Long selectionId, HttpServletRequest request);
     IdealSelectionDto getSelection(Long selectionId);
-    void editIdealName(String filePath, IdealDto idealDto, HttpServletRequest request);
     IdealSelectionDto getPlayableSelection(Long selectionId, int round, HttpServletRequest request);
 }

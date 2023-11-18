@@ -310,7 +310,7 @@
     function logout() {
         $.ajax({
             type: 'GET',
-            url: '/api/logOut',
+            url: '/api/auth/logOut',
             success: function () {
                 alert("로그아웃");
                 window.location.href = '/login';

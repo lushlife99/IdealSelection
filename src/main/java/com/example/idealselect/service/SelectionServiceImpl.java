@@ -107,15 +107,6 @@ public class SelectionServiceImpl implements IdealSelectionService{
         selectionMapper.deleteById(id);
     }
 
-    @Override
-    public IdealSelectionDto getRanking(HttpServletRequest request) {
-        return null;
-    }
-
-    @Override
-    public void updateWinRate(Long idealSelectionId, Long winIdealId, Long defeatIdealId, HttpServletRequest request) {
-
-    }
 
     @Override
     public void updateWinCount(Long winIdealId, IdealSelectionDto selectionDto, HttpServletRequest request) {
@@ -136,10 +127,6 @@ public class SelectionServiceImpl implements IdealSelectionService{
         selectionMapper.update(selection.getId(),selection);
     }
 
-    @Override
-    public void updateSubCount(Long idealSelectionId, HttpServletRequest request) {
-
-    }
 
     @Override
     public List<IdealSelectionDto> getCreationList(int pagePrefix, HttpServletRequest request) {
@@ -183,22 +170,7 @@ public class SelectionServiceImpl implements IdealSelectionService{
         return new IdealSelectionDto(selection);
     }
 
-    @Override
-    public void editIdealName(String filePath, IdealDto idealDto, HttpServletRequest request){
 
-        Ideal ideal = idealMapper.findById(idealDto.getId()).orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
-        Path imagePath = Paths.get(rootFilePath, filePath, ideal.getIdealName());
-        File file = imagePath.toFile();
-
-        Path newFilePath = Paths.get(rootFilePath, filePath, idealDto.getIdealName());
-        File newFile = newFilePath.toFile();
-
-        if (file.renameTo(newFile)) {
-            idealMapper.update(idealDto.getId(), new Ideal(idealDto));
-        } else {
-            throw new CustomException(ErrorCode.DUPLICATED_NAME_EXIST);
-        }
-    }
 
     @Override
     public IdealSelectionDto getPlayableSelection(Long selectionId, int round, HttpServletRequest request){
