@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>PlayPage</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <script src="/js/idealFunctions.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -104,8 +105,7 @@
     let nextRoundIdeals = [];
     let copyIdealList = null;
 
-    console.log([[${selection}]]);
-    function createCustomElements() {
+    function createPlayingElements() {
         var container = document.querySelector('.container');
         container.innerHTML = '';
         container = document.querySelector('.main-container');
@@ -182,7 +182,7 @@
                 }
 
             }
-            createCustomElements();
+            createPlayingElements();
         });
 
 
@@ -226,9 +226,8 @@
                     nextRoundIdeals = [];
                 }
             }
-            createCustomElements();
+            createPlayingElements();
         });
-
     }
     function config() {
         var number = selection.idealList.length;
@@ -269,7 +268,7 @@
                                 copyIdealList[i].winCount = 0;
                                 copyIdealList[i].finalWinCount = 0;
                             }
-                            createCustomElements();
+                            createPlayingElements();
                         },
                         error: function (xhr, status, error) {
                             console.error('AJAX 요청 실패:', status, error);

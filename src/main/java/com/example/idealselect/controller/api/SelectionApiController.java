@@ -59,8 +59,8 @@ public class SelectionApiController {
     }
 
     @GetMapping("/search")
-    public List<IdealSelectionDto> getSearchList(@RequestParam(required = false, defaultValue = "") String context, @RequestParam(required = false, defaultValue = "POPULARITY") String orderBy,
-                                                 @RequestParam(required = false, defaultValue = "0") Integer pageNum, HttpServletRequest request){
+    public List<IdealSelectionDto> getSearchList(@RequestParam(defaultValue = "") String context, @RequestParam(defaultValue = "POPULARITY") String orderBy,
+                                                 @RequestParam(defaultValue = "0") Integer pageNum, HttpServletRequest request){
 
         if(orderBy.equals("LATEST")) {
             return selectionService.getByLatest(context, pageNum, request);

@@ -23,7 +23,7 @@ public class SelectionController {
     private final ReplyService replyService;
 
     @GetMapping("/main")
-    public String mainPage(@RequestParam(value = "pagePrefix", required = false, defaultValue = "0") Integer pagePrefix, Model model, HttpServletRequest request){
+    public String mainPage(@RequestParam(defaultValue = "0") Integer pagePrefix, Model model, HttpServletRequest request){
 
         if (sessionManager.getSession(request).isEmpty())
             return "redirect:/login";
@@ -34,7 +34,7 @@ public class SelectionController {
     }
 
     @GetMapping("/mySelection")
-    public String mySelectionPage(@RequestParam(value = "pagePrefix", required = false, defaultValue = "0") Integer pagePrefix, Model model, HttpServletRequest request){
+    public String mySelectionPage(@RequestParam(defaultValue = "0") Integer pagePrefix, Model model, HttpServletRequest request){
         if (sessionManager.getSession(request).isEmpty())
             return "redirect:/login";
 
@@ -80,7 +80,7 @@ public class SelectionController {
     }
 
     @GetMapping("/reply")
-    public String replyPage(@RequestParam("id") Long selectionId, @RequestParam(value = "pagePrefix", required = false, defaultValue = "0") Integer pagePrefix, Model model, HttpServletRequest request){
+    public String replyPage(@RequestParam("id") Long selectionId, @RequestParam(defaultValue = "0") Integer pagePrefix, Model model, HttpServletRequest request){
         Optional<User> session = sessionManager.getSession(request);
         if (session.isEmpty())
             return "redirect:/login";

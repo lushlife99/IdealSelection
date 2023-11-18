@@ -5,6 +5,7 @@
     <title>createPage</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="/js/idealFunctions.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </head>
@@ -22,19 +23,16 @@
                 <a class="nav-link" href="/mySelection">내 월드컵 관리</a>
             </li>
         </ul>
-
-        <!-- Logout button -->
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
                 <a class="nav-link" href="#" onclick="logout()">로그아웃</a>
             </li>
         </ul>
-
     </div>
 </nav>
 
 <div class="ibox-content">
-    <form name="form" method="post" action="/api/selection/create" enctype="multipart/form-data">
+    <form id="form" method="post" action="/api/selection/create" enctype="multipart/form-data">
         <div class="form-group mb-3">
             <label class="col-sm-1 control-label">제목</label>
             <div class="col-sm-11">
@@ -61,22 +59,9 @@
     </form>
 </div>
 
-</body>
-</html>
-
-<script th:inline="javascript">
+<script>
     function saveData() {
-        var formData = new FormData($('#form')[0]);
-        var titleValue = document.querySelector('input[name="title"]').value;
-        var bodyValue = document.querySelector('input[name="body"]').value;
-        formData.append("title", titleValue);
-        formData.append("body", bodyValue);
-        var filesInput = document.querySelector('input[name="files"]');
-        var files = filesInput.files;
-
-        for (var i = 0; i < files.length; i++) {
-            formData.append("files", files[i]);
-        }
+        var formData = new FormData(document.getElementById('form'));
         $.ajax({
             url: '/api/selection/create',
             type: 'POST',
@@ -85,40 +70,15 @@
             processData: false,
             success: function(response) {
                 alert("완료");
-                window.location.href = '/mySelection'
-
+                window.location.href = '/mySelection';
             },
             error: function (error) {
                 alert("실패");
                 console.log("실패", JSON.stringify(error));
             }
-
         });
     }
 
-    function logout() {
-        $.ajax({
-            type: 'GET',
-            url: '/api/auth/logOut',  // 실제 로그인 엔드포인트로 변경
-            success: function (response) {
-                alert("로그아웃");
-                window.location.href = '/login';
-            },
-            error: function (error) {
-                alert(error.responseJSON.message);
-            }
-        });
-    }
-
-    function sortByPopularity() {
-        alert("인기순으로 정렬합니다.");
-    }
-
-    function sortByLatest() {
-        alert("최신순으로 정렬합니다.");
-    }
-
-    function search() {
-        alert("검색 기능 구현");
-    }
 </script>
+</body>
+</html>
