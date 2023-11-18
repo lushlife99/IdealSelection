@@ -1,0 +1,115 @@
+.root {
+    width: 60%;
+    margin: auto;
+}
+.pagination {
+    display: flex;
+    list-style: none;
+    padding: 0;
+}
+
+.comment-box {
+    background-color: white;
+    width: 100vh;
+    height: 6vh;
+    border: 1px solid gray;
+}
+.comment {
+    margin-bottom: 0px;
+}
+
+.progress {
+    width: 20vh;
+    height: 30px;
+    margin-left: 20px;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+.main-container {
+    background-color: black;
+    width: 100vh;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.match {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+.match img {
+    width: 70vh;
+    height: 80vh;
+}
+.image-description {
+    background-color: white;
+    color: black;
+}
+
+.row.equal > [class*='col-'] {
+    display: flex;
+    flex-direction: column;
+}
+
+.row.equal {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.row.equal [class*='col-'] > .ibox-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.row.equal .product-imitation {
+    flex: 1;
+}
+
+.row.equal .product-desc {
+    flex: 1;
+}
+
+
+.pagination li {
+    margin: 0 5px;
+}
+
+.pagination a {
+    text-decoration: none;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    color: #333;
+}
+
+.pagination .active {
+    background-color: #007BFF;
+    color: #fff;
+}
+
+
+#search-input {
+    min-width: 480px;
+
+}
+#popularBtn,
+#latestBtn {
+    white-space: nowrap;
+    width: auto;
+}
+
+.form-center {
+    display: flex;
+    justify-content: center;
+}
+
+.form-center form {
+    display: flex;
+    align-items: center;
+}
