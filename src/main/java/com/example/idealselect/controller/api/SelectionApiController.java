@@ -100,4 +100,10 @@ public class SelectionApiController {
         } else return selectionService.getByPopularity(context, pageNum, request);
     }
 
+    @PostMapping("/ideal")
+    public ResponseEntity addIdeal(@RequestParam MultipartFile file, @RequestParam Long selectionId, HttpServletRequest request){
+        idealService.add(file, selectionId, request);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
 }

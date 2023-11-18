@@ -31,7 +31,10 @@
     </ul>
   </div>
 </nav>
-
+<div class="hr-line-dashed mb-3" style="margin-left: 350px; margin-top: 30px">
+  <input type="file" name="files" multiple="multiple" id="addIdealFileInput" style="display: none; font-size: 30px;"/>
+  <label for="addIdealFileInput" class="add-ideal-btn btn btn-primary">이상형 추가</label>
+</div>
 <table>
   <thead>
   <tr>
@@ -66,6 +69,35 @@
 </html>
 
 <script th:inline="javascript">
+  var addIdealFileInput = document.getElementById('addIdealFileInput');
+  addIdealFileInput.addEventListener('change', function(event) {
+    handleAddIdealFileChange(event);
+  });
+
+  function handleAddIdealFileChange(event) {
+    var fileInput = event.target;
+    var file = fileInput.files[0];
+
+    var formData = new FormData();
+    formData.append('file', file);
+    formData.append('selectionId', [[${selection.id}]]);
+
+    $.ajax({
+      url: '/api/ideal', // Adjust the URL endpoint accordingly
+      type: 'POST',
+      data: formData,
+      contentType: false,
+      processData: false,
+      success: function(response) {
+        console.log('File uploaded successfully', response);
+        window.location.reload();
+      },
+      error: function(error) {
+        // Handle error case
+        console.error('File upload error', error);
+      }
+    });
+  }
 
   var idealInputs = document.getElementsByClassName('idealNameInput');
   for (var i = 0; i < idealInputs.length; i++) {

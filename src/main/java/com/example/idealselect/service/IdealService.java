@@ -45,7 +45,6 @@ public class IdealService {
 
             return new IdealDto(ideal);
         } catch (IOException e) {
-            e.printStackTrace();
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
     }
@@ -58,5 +57,22 @@ public class IdealService {
             throw new CustomException(ErrorCode.BAD_REQUEST);
 
         idealMapper.deleteById(id);
+    }
+
+    public void add(MultipartFile file, Long selectionId, HttpServletRequest request){
+        IdealSelection selection = selectionMapper.findByIdAllResult(selectionId).orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
+        User user = sessionManager.getSession(request).orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
+        if(!selection.getCreator().getId().equals(user.getId()))
+            throw new CustomException(ErrorCode.UNAUTHORIZED_USER);
+
+        Ideal ideal = Ideal.builder().idealName(file.getOriginalFilename()).selectionId(selectionId).winCount(0).finalWinCount(0).battleCount(0).build();
+
+        try {
+            Path path = Paths.get(rootFilePath, selection.getFilePath(), file.getOriginalFilename());
+            file.transferTo(path.toFile());
+            idealMapper.save(ideal);
+        } catch (IOException e) {
+            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
     }
 }
