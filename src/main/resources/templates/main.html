@@ -85,7 +85,7 @@
 <div class="container-fluid d-flex">
     <form class="d-flex">
         <div class="col-xl-3">
-            <button type="button" class="btn btn-outline-secondary btn-block" id="popularBtn" onclick="sortByPopularity()">인기순</button>
+            <button type="button" class="btn btn-outline-secondary btn-block active" id="popularBtn" onclick="sortByPopularity()">인기순</button>
         </div>
 
         <div class="col-xl-3">
@@ -95,7 +95,7 @@
             <div class="input-group custom-container">
                 <input class="form-control " type="search" placeholder="Search" aria-label="Search" id="search-input">
                 <div class="input-group-append">
-                    <button class="btn btn-outline-success" type="button" onclick="search()">검색</button>
+                    <button class="btn btn-outline-success" type="button" onclick="search(true)">검색</button>
                 </div>
             </div>
         </div>
@@ -124,12 +124,7 @@
     var currentPage = 1;
     var itemsPerPage = 10;
     var orderType = "POPULARITY";
-
-    for (const selectionListElement of selectionList) {
-        if(selectionListElement.id === 553){
-            console.log(selectionListElement);
-        }
-    }
+    var pagePrefix = [[${pagePrefix}]];
 
     function changePage(page) {
         if (page === 'prev') {
@@ -137,16 +132,12 @@
         } else if (page === 'next') {
             getNextPaginationList();
         } else if (typeof page === 'number') {
-            console.log(page);
             currentPage = page;
         }
 
-        // Update the active state of the pagination buttons.
-        //updatePagination();
         updateContent();
         updatePagination();
     }
-    console.log(1);
 
     function updateContent() {
         var startIdx = (currentPage - 1) * itemsPerPage;
@@ -180,7 +171,6 @@
                 var imagePath = '/api/selection/image/' + selection.filePath + '/' + encodeURIComponent(selection.img1.trim());
                 img1Div.style = 'float: left; width: 50%; height: 180px; background-image: url(' + imagePath + '); background-repeat: no-repeat; background-size: cover; background-position: center top; display: flex;';
             } else {
-                console.log("cc");
                 img1Div.style = 'float: left; width: 50%; height: 180px; background-color: #ccc;';
             }
 
@@ -278,20 +268,20 @@
     }
 
     function getNextPaginationList() {
-        console.log("next");
-        window.location.href = '/main?pagePrefix=' + (parseInt([[${pagePrefix}]]) + 10);
+        pagePrefix += 10;
+        search(false);
     }
 
     function getPrevPaginationList() {
-        console.log("prev");
-        window.location.href = '/main?pagePrefix=' + (parseInt([[${pagePrefix}]]) - 10);
+        pagePrefix -= 10;
+        search(false);
     }
 
     function updatePagination() {
         var paginationLinks = document.querySelectorAll('.pagination a');
         paginationLinks.forEach(function (link) {
             link.classList.remove('active');
-            if (link.innerHTML == [[${pagePrefix}]] + currentPage) {
+            if (link.innerHTML == pagePrefix + currentPage) {
                 link.classList.add('active');
             }
         });
@@ -301,7 +291,7 @@
         $.ajax({
             type: 'GET',
             url: '/api/logOut',
-            success: function (response) {
+            success: function () {
                 alert("로그아웃");
                 window.location.href = '/login';
             },
@@ -328,19 +318,24 @@
         orderType = "LATEST";
     }
 
-    function search() {
+    function search(resetPage) {
+
+
         var searchValue = document.getElementById("search-input").value;
         $.ajax({
             type: 'GET',
             url: '/api/selection/search',
             data: {
                 context: searchValue,
-                orderBy: orderType
-
+                orderBy: orderType,
+                pageNum: pagePrefix
             },
             success: function (response) {
+                console.log((response));
+                if(resetPage == true) {
+                    pagePrefix = 0;
+                }
                 selectionList = response;
-                currentPage = 1;
                 updatePage();
                 changePage(1);
             },
@@ -355,7 +350,7 @@
         pagination.innerHTML = '';
         var pageNum = selectionList == null ? 0 : (selectionList.length % 10 == 0 ? selectionList.length / 10 : selectionList.length / 10 + 1);
 
-        if ([[${pagePrefix}]] != 0) {
+        if (pagePrefix != 0) {
             var prev = document.createElement('a');
             prev.href = "#";
             prev.textContent = "이전";
@@ -366,11 +361,11 @@
         }
 
         if (pageNum != 0) {
-            for (var i = 1; i < pageNum; i++) {
+            for (var i = 1; i <= pageNum; i++) {
                 (function(i) {
                     var page = document.createElement('a');
                     page.href = "#";
-                    page.textContent = ([[${pagePrefix}]] + i);
+                    page.textContent = (pagePrefix + i);
                     page.onclick = function() {
                         changePage(i);
                     };

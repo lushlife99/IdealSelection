@@ -19,6 +19,5 @@ public class SelectionSearchCond {
         if(!orderType.equals("POPULARITY") && !orderType.equals("LATEST")) {
             this.orderType = null;
         } else this.orderType = orderType;
-        System.out.println("searchCond.title = " + this.title);
     }
 }
