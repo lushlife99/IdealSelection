@@ -9,11 +9,8 @@ import com.example.idealselect.service.IdealSelectionService;
 import com.example.idealselect.service.IdealService;
 import com.example.idealselect.session.SessionManager;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.websocket.Session;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -88,16 +85,19 @@ public class SelectionApiController {
         return selectionService.getPlayableSelection(selectionId, round, request);
     }
 
-//    @PutMapping("/play/winCount")
-//    public ResponseEntity updateWinCount(@RequestParam Long winIdealId, @RequestParam Long loseIdealId, HttpServletRequest request){
-//        selectionService.updateWinCount(winIdealId, loseIdealId, request);
-//        return new ResponseEntity(HttpStatus.OK);
-//    }
-
     @PutMapping("/play/endGame/{winIdealId}")
     public ResponseEntity updateCounts(@PathVariable Long winIdealId, @RequestBody IdealSelectionDto playingSelection, HttpServletRequest request){
         selectionService.updateWinCount(winIdealId, playingSelection, request);
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @GetMapping("/selection/search")
+    public List<IdealSelectionDto> getSearchList(@RequestParam(required = false, defaultValue = "") String context, @RequestParam(required = false, defaultValue = "POPULARITY") String orderBy,
+                                                 @RequestParam(required = false, defaultValue = "0") Integer pageNum, HttpServletRequest request){
+
+        if(orderBy.equals("LATEST")) {
+            return selectionService.getByLatest(context, pageNum, request);
+        } else return selectionService.getByPopularity(context, pageNum, request);
     }
 
 }

@@ -10,8 +10,8 @@ import java.util.List;
 
 public interface IdealSelectionService {
 
-    List<IdealSelectionDto> getByPopularity(Integer pageNum, HttpServletRequest request);
-    List<IdealSelectionDto> getByLatest(HttpServletRequest request);
+    List<IdealSelectionDto> getByPopularity(String context, Integer pageNum, HttpServletRequest request);
+    List<IdealSelectionDto> getByLatest(String context, Integer pageNum, HttpServletRequest request);
     IdealSelectionDto create(String title, String body, List<MultipartFile> files, HttpServletRequest request);
     IdealSelectionDto update(IdealSelectionDto idealSelection, HttpServletRequest request);
     void delete(Long id, HttpServletRequest request);

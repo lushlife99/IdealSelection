@@ -85,16 +85,15 @@
 <div class="container-fluid d-flex">
     <form class="d-flex">
         <div class="col-xl-3">
-            <button type="button" class="btn btn-outline-secondary btn-block" onclick="sortByPopularity()">인기순</button>
+            <button type="button" class="btn btn-outline-secondary btn-block" id="popularBtn" onclick="sortByPopularity()">인기순</button>
         </div>
 
         <div class="col-xl-3">
-            <button type="button" class="btn btn-outline-secondary btn-block" onclick="sortByLatest()">최신순</button>
+            <button type="button" class="btn btn-outline-secondary btn-block" id="latestBtn" onclick="sortByLatest()">최신순</button>
         </div>
-        <!-- Search bar and button -->
         <div class="col-xl-6">
             <div class="input-group custom-container">
-                <input class="form-control " type="search" placeholder="Search" aria-label="Search">
+                <input class="form-control " type="search" placeholder="Search" aria-label="Search" id="search-input">
                 <div class="input-group-append">
                     <button class="btn btn-outline-success" type="button" onclick="search()">검색</button>
                 </div>
@@ -106,7 +105,6 @@
 
 
 <div id="content" class="row equal mt-5">
-    <!-- Content will be dynamically updated here -->
 </div>
 
 <ul class="pagination mt-5 d-flex justify-content-center" id="pagination" th:with="num=(${selectionList == null ? 0 : (selectionList.size() % 10 == 0 ? selectionList.size() / 10 : selectionList.size() / 10 + 1)})">
@@ -125,6 +123,7 @@
     var selectionList = [[ ${selectionList} ]];
     var currentPage = 1;
     var itemsPerPage = 10;
+    var orderType = "POPULARITY";
 
     for (const selectionListElement of selectionList) {
         if(selectionListElement.id === 553){
@@ -314,15 +313,81 @@
 
 
     function sortByPopularity() {
-        alert("인기순으로 정렬합니다.");
+        var popularBtn = document.getElementById("popularBtn");
+        popularBtn.classList.add('active');
+        var latestBtn = document.getElementById("latestBtn");
+        latestBtn.classList.remove('active');
+        orderType = "POPULARITY";
     }
 
     function sortByLatest() {
-        alert("최신순으로 정렬합니다.");
+        var popularBtn = document.getElementById("popularBtn");
+        popularBtn.classList.remove('active');
+        var latestBtn = document.getElementById("latestBtn");
+        latestBtn.classList.add('active');
+        orderType = "LATEST";
     }
 
     function search() {
-        alert("검색 기능 구현");
+        var searchValue = document.getElementById("search-input").value;
+        $.ajax({
+            type: 'GET',
+            url: '/api/selection/search',
+            data: {
+                context: searchValue,
+                orderBy: orderType
+
+            },
+            success: function (response) {
+                selectionList = response;
+                currentPage = 1;
+                updatePage();
+                changePage(1);
+            },
+            error: function (error) {
+                alert(error.responseJSON.message);
+            }
+        });
+    }
+
+    function updatePage() {
+        var pagination = document.getElementById("pagination");
+        pagination.innerHTML = '';
+        var pageNum = selectionList == null ? 0 : (selectionList.length % 10 == 0 ? selectionList.length / 10 : selectionList.length / 10 + 1);
+
+        if ([[${pagePrefix}]] != 0) {
+            var prev = document.createElement('a');
+            prev.href = "#";
+            prev.textContent = "이전";
+            prev.onclick = function() {
+                changePage('prev');
+            };
+            pagination.appendChild(prev);
+        }
+
+        if (pageNum != 0) {
+            for (var i = 1; i < pageNum; i++) {
+                (function(i) {
+                    var page = document.createElement('a');
+                    page.href = "#";
+                    page.textContent = ([[${pagePrefix}]] + i);
+                    page.onclick = function() {
+                        changePage(i);
+                    };
+                    pagination.appendChild(page);
+                })(i);
+            }
+        }
+
+        if (selectionList.length == 100) {
+            var next = document.createElement('a');
+            next.href = "#";
+            next.textContent = "다음";
+            next.onclick = function() {
+                changePage('next');
+            };
+            pagination.appendChild(next);
+        }
     }
 
     changePage(1);

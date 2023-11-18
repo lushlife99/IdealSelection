@@ -41,8 +41,8 @@ public class SelectionServiceImpl implements IdealSelectionService{
     private String rootFilePath;
 
     @Override
-    public List<IdealSelectionDto> getByPopularity(Integer pageNum, HttpServletRequest request) {
-        List<IdealSelection> selectionList = selectionMapper.findAllBySearchCond(new SelectionSearchCond("", "POPULARITY"), 10 * pageNum);
+    public List<IdealSelectionDto> getByPopularity(String context, Integer pageNum, HttpServletRequest request) {
+        List<IdealSelection> selectionList = selectionMapper.findAllBySearchCond(new SelectionSearchCond(context, "POPULARITY"), 10 * pageNum);
         List<IdealSelectionDto> dtoList = new ArrayList<>();
         for (IdealSelection selection : selectionList) {
             IdealSelectionDto idealSelectionDto = new IdealSelectionDto(selection);
@@ -53,8 +53,15 @@ public class SelectionServiceImpl implements IdealSelectionService{
     }
 
     @Override
-    public List<IdealSelectionDto> getByLatest(HttpServletRequest request) {
-        return null;
+    public List<IdealSelectionDto> getByLatest(String context, Integer pageNum, HttpServletRequest request) {
+        List<IdealSelection> selectionList = selectionMapper.findAllBySearchCond(new SelectionSearchCond(context, "LATEST"), 10 * pageNum);
+        List<IdealSelectionDto> dtoList = new ArrayList<>();
+        for (IdealSelection selection : selectionList) {
+            IdealSelectionDto idealSelectionDto = new IdealSelectionDto(selection);
+            dtoList.add(idealSelectionDto);
+        }
+
+        return dtoList;
     }
 
     @Transactional

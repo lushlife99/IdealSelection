@@ -25,10 +25,11 @@ public class SelectionController {
 
     @GetMapping("/main")
     public String mainPage(@RequestParam(value = "pagePrefix", required = false, defaultValue = "0") Integer pagePrefix, Model model, HttpServletRequest request){
+
         if (sessionManager.getSession(request).isEmpty())
             return "redirect:/login";
 
-        model.addAttribute("selectionList",selectionService.getByPopularity(pagePrefix, request));
+        model.addAttribute("selectionList",selectionService.getByPopularity("", pagePrefix, request));
         model.addAttribute("pagePrefix", pagePrefix);
         return "main";
     }
