@@ -18,6 +18,5 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ErrorResponse.toResponseEntity(e.getErrorCode());
     }
 
-
 }
 

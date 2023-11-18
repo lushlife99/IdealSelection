@@ -98,6 +98,46 @@
         saveComment();
     })
 
+    function updatePage() {
+        var pagination = document.getElementById("pagination");
+        pagination.innerHTML = '';
+        var pageNum = replyList == null ? 0 : (replyList.length % 10 == 0 ? replyList.length / 10 : replyList.length / 10 + 1);
+
+        if ([[${pagePrefix}]] != 0) {
+            var prev = document.createElement('a');
+            prev.href = "#";
+            prev.textContent = "이전";
+            prev.onclick = function() {
+                changePage('prev');
+            };
+            pagination.appendChild(prev);
+        }
+
+        if (pageNum != 0) {
+            for (var i = 1; i < pageNum; i++) {
+                (function(i) {
+                    var page = document.createElement('a');
+                    page.href = "#";
+                    page.textContent = ([[${pagePrefix}]] + i);
+                    page.onclick = function() {
+                        changePage(i);
+                    };
+                    pagination.appendChild(page);
+                })(i);
+            }
+        }
+
+        if (replyList.length == 100) {
+            var next = document.createElement('a');
+            next.href = "#";
+            next.textContent = "다음";
+            next.onclick = function() {
+                changePage('next');
+            };
+            pagination.appendChild(next);
+        }
+    }
+
     function saveComment() {
         var comment = document.getElementById("comment-input").value;
         $.ajax({
@@ -109,7 +149,10 @@
             }),
             contentType: "application/json",
             success: function (response) {
-                console.log(response);
+                replyList = response;
+                currentPage = 1;
+                updatePage();
+                changePage(1);
             },
             error: function (error) {
                 alert(error.responseJSON.message);
@@ -117,6 +160,8 @@
         });
     }
     function changePage(page) {
+        console.log(page);
+
         if (page === 'prev') {
             getPrevPaginationList();
         } else if (page === 'next') {
@@ -157,35 +202,41 @@
             commentHeadDiv.appendChild(updateTime);
 
             if (reply.userId == [[${user.id}]]) {
-                var editBtn = document.createElement('button');
-                editBtn.type = 'button';
-                editBtn.className = 'btn btn-sm btn-outline btn-secondary';
-                editBtn.textContent = '수정';
-                editBtn.id = reply.id;
 
                 var deleteBtn = document.createElement('button');
                 deleteBtn.type = 'button';
                 deleteBtn.className = 'btn btn-sm btn-outline btn-danger';
                 deleteBtn.textContent = '삭제';
-                deleteBtn.id = reply.id;
+                deleteBtn.id = i;
 
-                editBtn.addEventListener('click', function () {
-                    console.log("수정");
-                });
-
-                deleteBtn.addEventListener('click', function () {
-                    console.log("삭제");
+                deleteBtn.addEventListener('click', function (event) {
+                    console.log(event.target.id);
+                    $.ajax({
+                        type: 'DELETE',
+                        url: '/api/reply/delete',
+                        data: JSON.stringify({
+                            id: replyList[event.target.id].id,
+                            userId: replyList[event.target.id].userId,
+                            idealSelectionId: [[${selectionId}]]
+                        }),
+                        contentType: "application/json",
+                        success: function (response) {
+                            replyList = response;
+                            updatePage();
+                            changePage(currentPage);
+                        },
+                        error: function (error) {
+                            alert(error.responseJSON.message);
+                        }
+                    });
                 });
 
                 var btnContainer = document.createElement('div');
                 btnContainer.style.marginLeft = 'auto';
-                btnContainer.appendChild(editBtn);
                 btnContainer.appendChild(deleteBtn);
 
                 commentHeadDiv.appendChild(btnContainer);
             }
-
-
 
             var commentDiv = document.createElement('p');
             commentDiv.style = 'margin-left: 12px;';

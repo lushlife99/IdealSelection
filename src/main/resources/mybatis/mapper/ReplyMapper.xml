@@ -19,13 +19,13 @@
     </update>
 
     <select id="findById" resultType="Reply">
-        select id, comment, author_id, author_name, selection_id, update_time
+        select id, comment, author_id as userId, author_name as userName, selection_id as idealSelectionId, update_time
         from reply
         where id = #{id}
     </select>
 
     <select id="findAllBySelectionId" resultType="Reply">
-        select id, comment, author_id, author_name, selection_id, update_time
+        select id, comment, author_id as userId, author_name as userName, selection_id as idealSelectionId, update_time
         from reply
         where selection_id = #{selectionId}
     </select>
