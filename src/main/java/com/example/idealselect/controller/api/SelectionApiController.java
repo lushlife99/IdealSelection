@@ -24,10 +24,11 @@ public class SelectionApiController {
 
 
     @PostMapping("/create")
-    public ResponseEntity<IdealSelectionDto> create(@RequestParam String title,
+    public ResponseEntity create(@RequestParam String title,
                                                     @RequestParam String body,
                                                     @RequestParam List<MultipartFile> files, HttpServletRequest request){
-        return new ResponseEntity<>(selectionService.create(title, body, files, request), HttpStatus.OK);
+        selectionService.create(title, body, files, request);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     @GetMapping(value = "/image/{selectionPath}/{idealName}", produces = MediaType.IMAGE_JPEG_VALUE)

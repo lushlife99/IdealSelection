@@ -14,9 +14,12 @@ public class Ideal {
 
     private Long id;
     private String idealName;
-    private Integer finalWinCount;
-    private Integer winCount;
-    private Integer battleCount;
+    @Builder.Default
+    private Integer finalWinCount = 0;
+    @Builder.Default
+    private Integer winCount = 0;
+    @Builder.Default
+    private Integer battleCount = 0;
     private Long selectionId;
 
     public Ideal(IdealDto idealDto){

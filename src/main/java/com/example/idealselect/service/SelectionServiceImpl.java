@@ -89,7 +89,7 @@ public class SelectionServiceImpl implements IdealSelectionService{
         }
 
         idealMapper.saveAll(idealList);
-        return null;
+        return new IdealSelectionDto(selection);
     }
 
     @Override
@@ -182,7 +182,7 @@ public class SelectionServiceImpl implements IdealSelectionService{
         Set<Integer> uniqueRandomNumbers = new HashSet<>();
 
         while (uniqueRandomNumbers.size() < round) {
-            uniqueRandomNumbers.add(random.nextInt(round));
+            uniqueRandomNumbers.add(random.nextInt(idealList.size()));
         }
 
         for (Integer uniqueRandomNumber : uniqueRandomNumbers) {
@@ -192,6 +192,5 @@ public class SelectionServiceImpl implements IdealSelectionService{
         selection.setIdealList(randomIdealList);
         return new IdealSelectionDto(selection);
     }
-
 
 }
