@@ -22,8 +22,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class UserServiceImplTest {
 
-    @Autowired
-    private UserServiceImpl userService;
 
     @Autowired
     private UserMapper userMapper;
@@ -31,15 +29,6 @@ class UserServiceImplTest {
     private static final String USERNAME = "user";
     private static final String PASSWORD = "1234";
 
-    private static MockHttpServletRequest request;
-
-    @BeforeAll
-    static void init(){
-        request = new MockHttpServletRequest();
-        /**
-         * 나중에 세션 넣어서 테스트.
-         */
-    }
 
     @Test
     void saveTest(){
@@ -86,22 +75,5 @@ class UserServiceImplTest {
 
         assertThat(findUser.getUserId()).isEqualTo(USERID);
     }
-
-
-    @Test
-    void join() {
-
-    }
-
-    @Test
-    void login() {
-    }
-
-    @Test
-    void logOut() {
-    }
-
-
-
 
 }

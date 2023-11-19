@@ -177,18 +177,8 @@ public class SelectionServiceImpl implements IdealSelectionService{
         User user = sessionManager.getSession(request).orElseThrow(() -> new CustomException(ErrorCode.UNAUTHORIZED_USER));
         IdealSelection selection = selectionMapper.findByIdAllResult(selectionId).orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
         List<Ideal> idealList = selection.getIdealList();
-        List<Ideal> randomIdealList = new ArrayList<>();
-        Random random = new Random();
-        Set<Integer> uniqueRandomNumbers = new HashSet<>();
-
-        while (uniqueRandomNumbers.size() < round) {
-            uniqueRandomNumbers.add(random.nextInt(idealList.size()));
-        }
-
-        for (Integer uniqueRandomNumber : uniqueRandomNumbers) {
-            randomIdealList.add(idealList.get(uniqueRandomNumber));
-        }
-
+        Collections.shuffle(idealList);
+        List<Ideal> randomIdealList = idealList.subList(0, round);
         selection.setIdealList(randomIdealList);
         return new IdealSelectionDto(selection);
     }

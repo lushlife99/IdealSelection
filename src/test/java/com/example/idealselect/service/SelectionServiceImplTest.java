@@ -180,40 +180,56 @@ class SelectionServiceImplTest {
     void testGetSelection() {
     }
 
-//    @Test
-//    @DisplayName("플레이 할 이상형 월드컵의 총 라운드 수와 SIZE가 일치하는지 테스트")
-//    void playableSelectionSizeTest() {
-//
-//        IdealSelection selection = IdealSelection.builder().title(TITLE).body(BODY).creator(user).build();
-//        selectionMapper.save(selection);
-//        List<Ideal> idealList = new ArrayList<>();
-//        for (int i = 0; i < 10; i++) {
-//            Ideal ideal = Ideal.builder().idealName(UUID.randomUUID().toString()).selectionId(selection.getId()).build();
-//            idealList.add(ideal);
-//        }
-//        selection.setIdealList(idealList);
-//        selectionMapper.save(selection);
-//        idealMapper.saveAll(idealList);
-//
-//        List<IdealSelectionDto> selectionDtoList = new ArrayList<>();
-//        int roundsToTest = 5;
-//        int round = 8;
-//        for (int i = 0; i < roundsToTest; i++) {
-//            IdealSelectionDto playableSelection = selectionService.getPlayableSelection(selection.getId(), round, request);
-//            selectionDtoList.add(playableSelection);
-//
-//            assertThat(playableSelection).isNotNull();
-//            assertThat(playableSelection.getIdealList()).hasSize(round);
-//        }
-//
-//        for (IdealSelectionDto idealSelectionDto : selectionDtoList) {
-//            System.out.println(idealSelectionDto.getIdealList().hashCode());
-//        }
-//    }
+    @Test
+    @DisplayName("플레이 할 이상형 월드컵의 총 라운드 수와 배열의 길이가 일치하는지 테스트")
+    void playableSelectionSizeTest() {
+
+        IdealSelection selection = IdealSelection.builder().title(TITLE).body(BODY).creator(user).build();
+        selectionMapper.save(selection);
+        int round = 8;
+        List<Ideal> idealList = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            Ideal ideal = Ideal.builder().idealName(UUID.randomUUID().toString()).selectionId(selection.getId()).build();
+            idealList.add(ideal);
+        }
+        idealMapper.saveAll(idealList);
+
+        IdealSelectionDto playableSelection = selectionService.getPlayableSelection(selection.getId(), round, request);
+
+        assertThat(playableSelection).isNotNull();
+        assertThat(playableSelection.getIdealList()).hasSize(round);
+
+    }
 
     @Test
-    @DisplayName("플레이 할 이상형 월드컵의 이상형 리스트를 랜덤으로 가져오는지 테스트")
+    @DisplayName("플레이 할 이상형 리스트를 랜덤으로 가져오는지 테스트")
     void playableSelectionRandomTest() {
 
+        IdealSelection selection = IdealSelection.builder().title(TITLE).body(BODY).creator(user).build();
+        selectionMapper.save(selection);
+        List<Ideal> idealList = new ArrayList<>();
+        for (int i = 0; i < 100; i++) {
+            Ideal ideal = Ideal.builder().idealName(UUID.randomUUID().toString()).selectionId(selection.getId()).build();
+            idealList.add(ideal);
+        }
+        idealMapper.saveAll(idealList);
+
+        List<IdealSelectionDto> selectionDtoList = new ArrayList<>();
+        int roundsToTest = 5;
+        int round = 8;
+        for (int i = 0; i < roundsToTest; i++) {
+            IdealSelectionDto playableSelection = selectionService.getPlayableSelection(selection.getId(), round, request);
+            selectionDtoList.add(playableSelection);
+        }
+
+        List<List<Ideal>> idealLists = selectionDtoList.stream()
+                .map(IdealSelectionDto::getIdealList)
+                .collect(Collectors.toList());
+
+        for (int i = 0; i < idealLists.size(); i++) {
+            for (int j = i + 1; j < idealLists.size(); j++) {
+                assertThat(idealLists.get(i)).isNotEqualTo(idealLists.get(j));
+            }
+        }
     }
 }
