@@ -165,20 +165,15 @@ class SelectionServiceImplTest {
 
 
     @Test
+    @DisplayName("자신이 만든 이상형 월드컵을 가져오는지 테스트")
     void getCreationList() {
+        List<IdealSelectionDto> creationList = selectionService.getCreationList(0, request);
+
+        for (IdealSelectionDto idealSelectionDto : creationList) {
+            assertThat(idealSelectionDto.getCreator().getId()).isEqualTo(user.getId());
+        }
     }
 
-    @Test
-    void getIdealImg() {
-    }
-
-    @Test
-    void getSelection() {
-    }
-
-    @Test
-    void testGetSelection() {
-    }
 
     @Test
     @DisplayName("플레이 할 이상형 월드컵의 총 라운드 수와 배열의 길이가 일치하는지 테스트")

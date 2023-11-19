@@ -141,9 +141,9 @@ public class SelectionServiceImpl implements IdealSelectionService{
         return dtoList;
     }
 
-    public byte[] getIdealImg(String imageName, String imageName2) throws IOException {
+    public byte[] getIdealImg(String selectionPath, String idealName) throws IOException {
 
-        Path imagePath = Paths.get(rootFilePath, imageName, imageName2);
+        Path imagePath = Paths.get(rootFilePath, selectionPath, idealName);
         Resource imageResource = new UrlResource(imagePath.toUri());
         if (imageResource.exists()) {
             return Files.readAllBytes(imagePath);
@@ -176,11 +176,18 @@ public class SelectionServiceImpl implements IdealSelectionService{
     public IdealSelectionDto getPlayableSelection(Long selectionId, int round, HttpServletRequest request){
         User user = sessionManager.getSession(request).orElseThrow(() -> new CustomException(ErrorCode.UNAUTHORIZED_USER));
         IdealSelection selection = selectionMapper.findByIdAllResult(selectionId).orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
-        List<Ideal> idealList = selection.getIdealList();
+        List<Ideal> idealList = new ArrayList<>(selection.getIdealList());
+
         Collections.shuffle(idealList);
         List<Ideal> randomIdealList = idealList.subList(0, round);
-        selection.setIdealList(randomIdealList);
-        return new IdealSelectionDto(selection);
-    }
 
+        IdealSelection randomSelection = IdealSelection.builder()
+                .title(selection.getTitle())
+                .body(selection.getBody())
+                .creator(selection.getCreator())
+                .idealList(randomIdealList)
+                .build();
+
+        return new IdealSelectionDto(randomSelection);
+    }
 }
