@@ -6,6 +6,7 @@
     <insert id="save" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
         insert into user (user_id, password, user_name)
         values (#{userId}, #{password}, #{userName})
+        ON DUPLICATE KEY UPDATE user_id = values(user_id), password = values(password), user_name = values(user_name)
     </insert>
     
     <update id="update">

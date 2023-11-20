@@ -171,6 +171,28 @@
             ) AS creator_id
             );
     </select>
+    <select id="findByFilePath" resultMap="IdealSelectionResultMap">
+        SELECT selection.id          AS id,
+               selection.title       AS title,
+               selection.body        AS body,
+               selection.file_path   AS filePath,
+               selection.sub_count   AS subCount,
+               selection.creator_id  AS creatorId,
+               selection.update_time AS updateTime,
+               ideal.id              AS idealList_id,
+               ideal.ideal_name      AS idealList_idealName,
+               ideal.final_win_count AS idealList_finalWinCount,
+               ideal.battle_count AS idealList_battleCount,
+               ideal.win_count       AS idealList_winCount,
+               user.id               AS creator_id,
+               user.user_id          AS creator_userId,
+               user.password         AS creator_password,
+               user.user_name        AS creator_userName
+        FROM ideal_selection selection
+                 LEFT JOIN ideal ideal ON selection.id = ideal.selection_id
+                 LEFT JOIN user user ON selection.creator_id = user.id
+        WHERE selection.file_path = #{filePath}
+    </select>
 
     <select id="findAllBySearchCond" resultMap="IdealSelectionResultMap">
         SELECT selection.id          AS id,

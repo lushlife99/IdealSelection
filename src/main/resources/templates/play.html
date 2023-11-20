@@ -78,6 +78,7 @@
     let nextRoundIdeals = [];
     let copyIdealList = null;
 
+    console.log(selection);
     function createPlayingElements() {
         var container = document.querySelector('.container');
         container.innerHTML = '';
@@ -89,7 +90,7 @@
         var h1Text = [[${selection.title}]] + " 총 " + totalRound + "강 " + currentRound + "/" + currentTotalRound;
         const imageUrl1 = `/api/selection/image/${playingSelection.filePath}/${currentRoundIdeals[(currentRound-1)*2].idealName}`;
         const imageUrl2 = `/api/selection/image/${playingSelection.filePath}/${currentRoundIdeals[(currentRound-1)*2+1].idealName}`;
-
+        console.log(playingSelection);
         var innerHTML =
             `
            <div class="ideal-cup" style="display: flex; justify-content: center; align-items: center; height: 100vh; padding: 0px">
@@ -160,6 +161,7 @@
 
 
         imageElement2.addEventListener('click', function(event) {
+            console.log(playingSelection);
             var winIdealId = event.target.id;
             var loseIdealId = imageElement1.getAttribute("id");
             copyIdealList.map(function (ideal){
@@ -179,7 +181,7 @@
                 if(currentTotalRound == 1) {
 
                     playingSelection.idealList = copyIdealList;
-                    console.log(playingSelection);
+
                     $.ajax({
                         type: 'PUT',
                         url: 'http://localhost:8080/api/selection/play/endGame/' + winIdealId,

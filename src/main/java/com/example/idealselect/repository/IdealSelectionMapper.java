@@ -14,6 +14,7 @@ public interface IdealSelectionMapper {
     Optional<IdealSelection> findById(Long id);
     Optional<IdealSelection> findByIdAllResult(Long id);
     void deleteById(Long id);
+    Optional<IdealSelection> findByFilePath(String filePath);
     List<IdealSelection> findAll();
     List<IdealSelection> findByCreatorId(Long creatorId);
     List<IdealSelection> findPageableByCreatorId(Long creatorId, int pageNum);

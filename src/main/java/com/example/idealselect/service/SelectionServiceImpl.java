@@ -73,13 +73,14 @@ public class SelectionServiceImpl implements IdealSelectionService{
 
         selectionMapper.save(selection);
         Path path = Paths.get(rootFilePath, selection.getFilePath());
-        List<Ideal> idealList = new ArrayList<>();
+        Path absolutePath = path.toAbsolutePath();
 
+        List<Ideal> idealList = new ArrayList<>();
         try {
-            Files.createDirectories(path);
+            Files.createDirectories(absolutePath);
             for (MultipartFile file : files) {
                 String name = file.getOriginalFilename();
-                Path imagePath = Paths.get(path.toString(), name);
+                Path imagePath = Paths.get(absolutePath.toString(), name);
                 file.transferTo(new File(imagePath.toString()));
                 Ideal ideal = Ideal.builder().idealName(name).winCount(0).finalWinCount(0).battleCount(0).selectionId(selection.getId()).build();
                 idealList.add(ideal);
@@ -143,7 +144,7 @@ public class SelectionServiceImpl implements IdealSelectionService{
 
     public byte[] getIdealImg(String selectionPath, String idealName) throws IOException {
 
-        Path imagePath = Paths.get(rootFilePath, selectionPath, idealName);
+        Path imagePath = Paths.get(rootFilePath, selectionPath, idealName).toAbsolutePath();
         Resource imageResource = new UrlResource(imagePath.toUri());
         if (imageResource.exists()) {
             return Files.readAllBytes(imagePath);
@@ -159,9 +160,6 @@ public class SelectionServiceImpl implements IdealSelectionService{
 
         IdealSelection selection = selectionMapper.findByIdAllResult(selectionId)
                 .orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
-        if(!selection.getCreator().getId().equals(user.getId()))
-            throw new CustomException(ErrorCode.BAD_REQUEST);
-
         return new IdealSelectionDto(selection);
     }
     @Override
@@ -180,14 +178,9 @@ public class SelectionServiceImpl implements IdealSelectionService{
 
         Collections.shuffle(idealList);
         List<Ideal> randomIdealList = idealList.subList(0, round);
+        selection.setIdealList(randomIdealList);
 
-        IdealSelection randomSelection = IdealSelection.builder()
-                .title(selection.getTitle())
-                .body(selection.getBody())
-                .creator(selection.getCreator())
-                .idealList(randomIdealList)
-                .build();
 
-        return new IdealSelectionDto(randomSelection);
+        return new IdealSelectionDto(selection);
     }
 }

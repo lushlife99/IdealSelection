@@ -32,4 +32,7 @@ public class AuthApiController {
         userService.logOut(request, response);
         return new ResponseEntity(HttpStatus.OK);
     }
+
+
+
 }
