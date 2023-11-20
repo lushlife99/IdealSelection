@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Slf4j
 public class DataInit {
@@ -29,10 +30,9 @@ public class DataInit {
 
     @Value("${file:}")
     private String rootPath;
-    private final String selectionPath1 = "InitialIdealSelection1";
-    private final String selectionPath2 = "InitialIdealSelection2";
-    private final String selectionPath3 = "InitialIdealSelection3";
-    private final String selectionPath4 = "InitialIdealSelection4";
+    private final List<String> selectionPath = List.of("온라인 게임 월드컵", "롤 챔피언 월드컵", "역대 축구선수 공격수 월드컵", "서구권 여배우 이상형 월드컵",
+            "컵라면 월드컵", "한국 드라마 월드컵", "새끼 동물 월드컵", "최애 포켓몬 월드컵", "여자 아이돌 이상형 월드컵",
+            "최강 동물 월드컵", "최애 음식 월드컵");
 
     public DataInit(UserMapper userMapper, IdealMapper idealMapper, IdealSelectionMapper selectionMapper) {
         this.userMapper = userMapper;
@@ -49,30 +49,15 @@ public class DataInit {
             createUser();
         }
 
-        Optional<IdealSelection> initialIdealSelection1 = selectionMapper.findByFilePath(selectionPath1);
-        Optional<IdealSelection> initialIdealSelection2 = selectionMapper.findByFilePath(selectionPath2);
-        Optional<IdealSelection> initialIdealSelection3 = selectionMapper.findByFilePath(selectionPath3);
-        Optional<IdealSelection> initialIdealSelection4 = selectionMapper.findByFilePath(selectionPath4);
-
-        if (initialIdealSelection1.isEmpty()) {
-            IdealSelection selection = createSelection(initialUser, "여자 아이돌 이상형 월드컵", selectionPath1);
-            createIdeals(selectionPath1, selection);
+        for(int i = 0; i < selectionPath.size(); i++){
+            String path = selectionPath.get(i);
+            Optional<IdealSelection> selection = selectionMapper.findByFilePath(path);
+            if(selection.isEmpty()){
+                IdealSelection createdSelection = createSelection(initialUser.get(), path);
+                createIdeals(path, createdSelection);
+            }
         }
 
-        if (initialIdealSelection2.isEmpty()) {
-            IdealSelection selection = createSelection(initialUser, "최강 동물 월드컵", selectionPath2);
-            createIdeals(selectionPath2, selection);
-        }
-
-        if (initialIdealSelection3.isEmpty()) {
-            IdealSelection selection = createSelection(initialUser, "최애 음식 월드컵", selectionPath3);
-            createIdeals(selectionPath3, selection);
-        }
-
-        if (initialIdealSelection4.isEmpty()) {
-            IdealSelection selection = createSelection(initialUser, "최애 포켓몬 월드컵", selectionPath4);
-            createIdeals(selectionPath4, selection);
-        }
     }
 
     @Transactional
@@ -98,9 +83,10 @@ public class DataInit {
     }
 
     @Transactional
-    public IdealSelection createSelection(Optional<User> initialUser, String title, String selectionPath1) {
-        IdealSelection selection = IdealSelection.builder().creator(initialUser.get()).title(title).body("23/11/20 업데이트")
-                .filePath(selectionPath1).updateTime(LocalDateTime.now()).build();
+    public IdealSelection createSelection(User initialUser, String path) {
+        Random random = new Random();
+        IdealSelection selection = IdealSelection.builder().creator(initialUser).title(path).body("23/11/20 업데이트")
+                .filePath(path).updateTime(LocalDateTime.now()).build();
         selectionMapper.save(selection);
         return selection;
     }

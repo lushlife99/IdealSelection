@@ -180,7 +180,6 @@ public class SelectionServiceImpl implements IdealSelectionService{
         List<Ideal> randomIdealList = idealList.subList(0, round);
         selection.setIdealList(randomIdealList);
 
-
         return new IdealSelectionDto(selection);
     }
 }

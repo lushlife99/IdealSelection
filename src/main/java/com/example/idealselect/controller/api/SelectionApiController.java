@@ -33,7 +33,6 @@ public class SelectionApiController {
 
     @GetMapping(value = "/image/{selectionPath}/{idealName}", produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<byte[]> getIdealImg(@PathVariable String selectionPath, @PathVariable String idealName) {
-
         try {
             byte[] img = selectionService.getIdealImg(selectionPath, idealName);
             return new ResponseEntity<>(img, HttpStatus.OK);

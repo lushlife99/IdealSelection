@@ -80,7 +80,7 @@
             search(true);
         }
     })
-
+    console.log(selectionList);
     function updateContent() {
         var startIdx = (currentPage - 1) * itemsPerPage;
         var endIdx = startIdx + itemsPerPage;
@@ -109,7 +109,7 @@
 
             var img1Div = document.createElement('div');
             if (selection.img1) {
-                var imagePath = '/api/selection/image/' + selection.filePath + '/' + encodeURIComponent(selection.img1.trim());
+                var imagePath = '/api/selection/image/' + encodeURIComponent(selection.filePath) + '/' + encodeURIComponent(selection.img1.trim());
                 img1Div.style = 'float: left; width: 50%; height: 180px; background-image: url(' + imagePath + '); background-repeat: no-repeat; background-size: cover; background-position: center top; display: flex;';
             } else {
                 img1Div.style = 'float: left; width: 50%; height: 180px; background-color: #ccc;';
@@ -117,7 +117,7 @@
 
             var img2Div = document.createElement('div');
             if (selection.img2) {
-                var imagePath = '/api/selection/image/' + selection.filePath + '/' + encodeURIComponent(selection.img2.trim());
+                var imagePath = '/api/selection/image/' + encodeURIComponent(selection.filePath) + '/' + encodeURIComponent(selection.img2.trim());
                 img2Div.style = 'float: left; width: 50%; height: 180px; background-image: url(' + imagePath + '); background-repeat: no-repeat; background-size: cover; background-position: center top; display: flex;';
             } else {
                 img2Div.style = 'float: left; width: 50%; height: 180px; background-color: #ccc;';
